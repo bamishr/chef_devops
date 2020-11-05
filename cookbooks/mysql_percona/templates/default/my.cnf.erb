@@ -1,0 +1,569 @@
+#
+# The MySQL database server configuration file.
+#
+# You can copy this to one of:
+# - "/etc/mysql/my.cnf" to set global options,
+# - "~/.my.cnf" to set user-specific options.
+# 
+# One can use all long options that the program supports.
+# Run program with --help to get a list of available options and with
+# --print-defaults to see which it would actually understand and use.
+#
+# For explanations see
+# http://dev.mysql.com/doc/mysql/en/server-system-variables.html
+
+
+# This will be passed to all mysql clients
+# It has been reported that passwords should be enclosed with ticks/quotes
+# escpecially if they contain "#" chars...
+# Remember to edit /etc/mysql/debian.cnf when changing the socket location.
+[client]
+port                             = 3306
+socket                           = /var/run/mysqld/mysqld-<%= @instance %>.sock
+user                             = root
+pass                             = <%= @mysql_root_passwd %>
+
+# This was formally known as [safe_mysqld]. Both versions are currently parsed.
+[mysqld_safe]
+socket                           = /var/run/mysqld/mysqld-<%= @instance %>.sock
+nice                             = 0
+user                             = root
+pass                             = <%= @mysql_root_passwd %>
+
+[mysqld]
+#
+# * Basic Settings
+#
+user                             = mysql
+pid-file                         = /var/run/mysqld/mysqld-<%= @instance %>.pid
+socket                           = /var/run/mysqld/mysqld-<%= @instance %>.sock
+port                             = 3306
+basedir                          = /usr
+datadir                          = <%= @instance_prefix %>/data
+tmpdir                           = /tmp
+lc-messages-dir                  = /usr/share/mysql
+skip-external-locking
+
+default_storage_engine           = InnoDB
+
+# char set foo (specified for the occasional non-standard needs jira/fisheye/java)
+collation_server                 = <%= node[:mysql][:my_cnf][:collation_server] %> 
+character_set_server             = <%= node[:mysql][:my_cnf][:character_set_server] %> 
+
+#
+# For compatibility to other Debian packages that still use
+# libmysqlclient10 and libmysqlclient12.
+old_passwords                    = 1
+
+#
+# Instead of skip-networking the default is now to listen only on
+# localhost which is more compatible and is not less secure.
+# I am not yet sure how to gracefully handle this in chef
+# For MMM no bind address is required so that the floating IP functions
+# for multi-mysql we need to be explicit with the bind address
+# I expect this will map FQDN, but am not positive
+<% if node.role?("mysql-adhoc") -%>
+bind-address                     = <%= node[:mysql][:my_cnf][@instance][:bind_address] %>
+<% else -%>
+#bind-address                    = <%= node[:mysql][:my_cnf][:bind_address] %>
+<% end -%>
+
+#========================================================
+# Connections, files, and threads
+#========================================================
+<% if node['mysql']['my_cnf']['read_only'] -%>
+read_only                        = <%= node[:mysql][:my_cnf][:read_only] %>
+<% else -%>
+read_only                        = OFF
+<% end -%>
+
+
+#========================================================
+#
+# * Fine Tuning
+#
+#========================================================
+
+#========================================================
+# Connections, files, and threads
+#========================================================
+
+# The maximum permitted number of simultaneous client connections. By default, this is 100. 
+max_connections                  = <%= node[:mysql][:my_cnf][:max_connections] %> 
+
+# The number of open tables for all threads. You can check whether you need to increase the table cache by checking the Opened_tables status variable.  If the value 
+# of Opened_tables is large and you do not use FLUSH TABLES often (which just forces all tables to be closed and reopened), then you should increase the value of the 
+# table_open_cache variable.
+table_open_cache                 = <%= node[:mysql][:my_cnf][:table_open_cache] %> 
+
+# How many threads the server should cache for reuse. When a client disconnects, the client's threads are put in the cache if there are fewer 
+# than thread_cache_size threads there. Requests for threads are satisfied by reusing threads taken from the cache if possible, and only when 
+# the cache is empty is a new thread created. 
+thread_cache_size                = <%= node[:mysql][:my_cnf][:thread_cache_size] %> 
+
+# If there are more than this number of interrupted connections from a host, that host is blocked from further connections. A forceful tomcat shutdown w/active connection 
+# pool will result in a lot of errs, we don't want to be blocked just because of that so this is max'ed
+max_connect_errors               = <%= node[:mysql][:my_cnf][:max_connect_errors] %> 
+
+# The maximum size of one packet or any generated/intermediate string. You must increase this value if you are using large BLOB columns or long strings. It should be as 
+# big as the largest BLOB you want to use. The protocol limit for max_allowed_packet is 1GB. The value should be a multiple of 1024; nonmultiples are rounded down to the 
+# nearest multiple.
+#
+# When you change the message buffer size by changing the value of the max_allowed_packet variable, you should also change the buffer size on the client side if your client 
+# program permits it. On the client side, max_allowed_packet has a default of 1GB. Some programs such as mysql and mysqldump enable you to change the client-side value by 
+# setting max_allowed_packet on the command line or in an option file.
+max_allowed_packet               = <%= node[:mysql][:my_cnf][:max_allowed_packet] %>
+
+# The stack size for each thread. Many of the limits detected by the crash-me test are dependent on this value. See Section 7.1.3, “The MySQL Benchmark Suite”. The default of 
+# 192KB (256KB for 64-bit systems) is large enough for normal operation. If the thread stack size is too small, it limits the complexity of the SQL statements that the server 
+# can handle, the recursion depth of stored procedures, and other memory-consuming actions.
+thread_stack                     = <%= node[:mysql][:my_cnf][:thread_stack] %>
+
+
+#========================================================
+# Memory usage
+#
+# Max mem usage = global_buffers + (thread_buffers * max_connections)
+#========================================================
+# The maximum size of internal in-memory temporary tables. (The actual limit is determined as the minimum of tmp_table_size and max_heap_table_size.) If an in-memory 
+# temporary table exceeds the limit, MySQL automatically converts it to an on-disk MyISAM table. Increase the value of tmp_table_size (and max_heap_table_size if necessary) 
+# if you do many advanced GROUP BY queries and you have lots of memory. This variable does not apply to user-created MEMORY tables. You can compare the number of internal 
+# on-disk temporary tables created to the total number of internal temporary tables created by comparing the values of the Created_tmp_disk_tables and Created_tmp_tables variables.
+# From the counters you want to look at:
+#
+#   Created_tmp_disk_tables                 8455036           137           284           251           211
+#   Created_tmp_files                          4105             0             0             0             0
+#   Created_tmp_tables                     17489298           473           876           529           537
+#
+# If Created_tmp_disk_tables is a high number you want to increase available RAM here and for max_heap_table_size else leave it small
+tmp_table_size                   = <%= node[:mysql][:my_cnf][:tmp_table_size] %> 
+
+# This variable sets the maximum size to which user-created MEMORY tables are permitted to grow. The value of the variable is used to calculate MEMORY table MAX_ROWS values. 
+# Setting this variable has no effect on any existing MEMORY table, unless the table is re-created with a statement such as CREATE TABLE or altered with ALTER TABLE or 
+# TRUNCATE TABLE. A server restart also sets the maximum size of existing MEMORY tables to the global max_heap_table_size value. 
+max_heap_table_size              = <%= node[:mysql][:my_cnf][:max_heap_table_size] %> 
+
+# ----------------------------------------------
+# Global Buffers
+#
+# Do not cache results that are larger than this number of bytes. The default value is 1MB.
+query_cache_limit                = <%= node[:mysql][:my_cnf][:query_cache_limit] %> 
+
+# The amount of memory allocated for caching query results. The default value is 0, which disables the query cache. The permissible values are multiples of 1024; other values 
+# are rounded down to the nearest multiple. Note that query_cache_size bytes of memory are allocated even if query_cache_type is set to 0
+query_cache_size                 = <%= node[:mysql][:my_cnf][:query_cache_size] %>
+
+# Set the query cache type. (OFF, ON, DEMAND). We choose OFF.
+query_cache_type                 = <%= node[:mysql][:my_cnf][:query_cache_type] %>
+
+# Index blocks for MyISAM tables are buffered and are shared by all threads. key_buffer_size is the size of the buffer used for index blocks. The key buffer is also known as 
+# the key cache. You can increase the value to get better index handling for all reads and multiple writes; on a system whose primary function is to run MySQL using the 
+# MyISAM storage engine, 25% of the machine's total memory is an acceptable value for this variable.
+key_buffer_size                  = <%= node[:mysql][:my_cnf][:key_buffer_size] %>
+
+
+# ----------------------------------------------
+# Per-connection Buffers
+#
+# Each session that needs to do a sort allocates a buffer of this size. sort_buffer_size is not specific to any storage engine and applies in a general manner for optimization. 
+# See Section 7.3.1.11, “ORDER BY Optimization”, for example. If you see many Sort_merge_passes per second in SHOW GLOBAL STATUS output, you can consider increasing the 
+# sort_buffer_size value to speed up ORDER BY or GROUP BY operations that cannot be improved with query optimization or improved indexing. The entire buffer is allocated even if 
+# it is not all needed, so setting it larger than required globally will slow down most queries that sort. It is best to increase it as a session setting, and only for the sessions 
+# that need a larger size. On Linux, there are thresholds of 256KB and 2MB where larger values may significantly slow down memory allocation, so you should consider staying below 
+# one of those values. Experiment to find the best value for your workload. See Section C.5.4.4, “Where MySQL Stores Temporary Files”. The maximum permissible setting for 
+# sort_buffer_size is 4GB. 
+#
+# The sort buffer is a thread buffer used for sorting, its allocated in chunks of sort_buffer_size and in the case where a single buffer is not large enough multiple buffers are 
+# created and merged. If we SHOW STATUS the relevant section is the count of sort_merge_passes:
+# 
+#   | Sort_merge_passes                        | 0             |
+#
+# If we are seeing no merges we can use a small/default sort_buffer_size:
+sort_buffer_size                 = <%= node[:mysql][:my_cnf][:sort_buffer_size] %>
+
+# The minimum size of the buffer that is used for plain index scans, range index scans, and joins that do not use indexes and thus perform full table scans. Normally, the best way 
+# to get fast joins is to add indexes. Increase the value of join_buffer_size to get a faster full join when adding indexes is not possible. One join buffer is allocated for each 
+# full join between two tables. For a complex join between several tables for which indexes are not used, multiple join buffers might be necessary. There is no gain from setting the 
+# buffer larger than required to hold each matching row, and all joins allocate at least the minimum size, so use caution in setting this variable to a large value globally. It is 
+# better to keep the global setting small and change to a larger setting only in sessions that are doing large joins. Memory allocation time can cause substantial performance drops 
+# if the global size is larger than needed by most queries that use it. The maximum permissible setting for join_buffer_size is 4GB.
+#
+# The sort buffer is also a thread buffer, its used for buffering when joins are unable to use indexes.
+# If in a SHOW STATUS we see no full join:
+#
+#   | Select_full_join                         | 0             |
+#
+# We can use the small default.
+join_buffer_size                 = <%= node[:mysql][:my_cnf][:join_buffer_size] %>
+
+# The size of the buffer that is allocated when sorting MyISAM indexes during a REPAIR TABLE or when creating indexes with CREATE INDEX or ALTER TABLE.
+# We are no longer using myisam tables.
+myisam_sort_buffer_size          = <%= node[:mysql][:my_cnf][:myisam_sort_buffer_size] %>
+
+# Each thread that does a sequential scan allocates a buffer of this size (in bytes) for each table it scans. If you do many sequential scans, you might want to increase this value, 
+# which defaults to 131072. The value of this variable should be a multiple of 4KB. If it is set to a value that is not a multiple of 4KB, its value will be rounded down to the nearest 
+# multiple of 4KB. The maximum permissible setting for read_buffer_size is 2GB. read_buffer_size and read_rnd_buffer_size are not specific to any storage engine and apply in a general 
+# manner for optimization. See Section 7.9.4, “How MySQL Uses Memory”, for example.
+read_buffer_size                 = <%= node[:mysql][:my_cnf][:read_buffer_size] %> 
+
+# When reading rows in sorted order following a key-sorting operation, the rows are read through this buffer to avoid disk seeks. See Section 7.3.1.11, “ORDER BY Optimization”. Setting 
+# the variable to a large value can improve ORDER BY performance by a lot. However, this is a buffer allocated for each client, so you should not set the global variable to a large value. 
+# Instead, change the session variable only from within those clients that need to run large queries.
+read_rnd_buffer_size             = <%= node[:mysql][:my_cnf][:read_rnd_buffer_size] %> 
+
+# Set the MyISAM storage engine recovery mode. We use BACKUP which means if the data file was changed during recovery, we save a backup of the tbl_name.MYD file as tbl_name-datetime.BAK
+myisam-recover                   = BACKUP
+
+#
+# * Logging and Replication
+#
+# This option enables logging to the general query log, which contains entries that record client connections and SQL statements received from clients. 
+#log
+
+# Log errors and startup messages to this file.
+#log-error                       = /var/log/mysql/mysql-<%= @instance %>-error.log
+
+# Specify the initial general query log state and file
+general_log                      = OFF
+general_log_file                 = /var/log/mysql/mysql-<%= @instance %>-general.log
+
+# Specify the initial slow query log state and file
+slow_query_log                   = ON
+slow_query_log_file              = /var/log/mysql/mysql-<%= @instance %>-slow.log
+
+# If you are using this option with the slow query log enabled, queries that are expected to retrieve all rows are logged. This option does not necessarily mean that no index is used. 
+# For example, a query that uses a full index scan uses an index but would be logged because the index would not limit the number of rows.
+log_queries_not_using_indexes    = ON
+
+# Specifies how much information to include in your slow log. The value is a comma-delimited string, and can contain any combination of the following values:
+# 		microtime: Log queries with microsecond precision (mandatory).
+#		query_plan: Log information about the query``s execution plan (optional).
+#		innodb: Log InnoDB statistics (optional).
+#		full: Equivalent to all other values OR``ed together.
+#		profiling: Enables profiling of all queries in all connections.
+#		profiling_use_getrusage: Enables usage of the getrusage function.
+#
+# For example, to enable microsecond query timing and InnoDB statistics, set this option to microtime,innodb. To turn all options on, set the option to full.
+log_slow_verbosity               = <%= node[:mysql][:my_cnf][:log_slow_verbosity] %>
+
+# Specifies the time threshold for filtering queries out of the slow query log. The unit of time is seconds. This option has the same meaning as in a standard MySQL server, with the 
+# following changes:
+# 		The option accepts fractional values. If set to 0.5, for example, queries longer than 1/2 second will be logged.
+#
+# If the value is set to 0, then all queries are logged. This is different from the standard MySQL build, where a value of 0 disables logging. Before version 1.01 of this feature, 
+# the value was an integer, and the unit of time was microseconds, not seconds.
+long_query_time                  = <%= node[:mysql][:my_cnf][:long_query_time] %> 
+
+#========================================================
+# Percona patches
+#========================================================
+enable_query_response_time_stats = <%= node[:mysql][:my_cnf][:enable_query_response_time_stats] %>
+userstat = <%= node[:mysql][:my_cnf][:userstat] %>
+# Percona Server as of versions 5.1.56 and 5.5.11 allows utilizing fast index creation for all of the above cases, which can potentially speed them up greatly. This feature is 
+# controlled by the expand_fast_index_creation system variable which is OFF by default.
+expand_fast_index_creation       = <%= node[:mysql][:my_cnf][:expand_fast_index_creation] %>
+
+#========================================================
+# Logging and Replication
+#========================================================
+# numeric, so for convenience we are doing the eth0 ip minus the '.' 
+<% if node.role?("mysql-adhoc") -%>
+server_id                        = <%= node[:mysql][:my_cnf][@instance][:server_id] %>
+<% else -%>
+server_id                        = <%= node[:mysql][:my_cnf][:server_id] %>
+<% end -%>
+<% if node.role?("mysql-adhoc") -%>
+<% if node['mysql']['my_cnf']["#{@instance}"]['report_host'] -%>
+report_host                      = <%= node[:mysql][:my_cnf][@instance][:report_host] %>
+<% else -%>
+report_host                      = <%= node[:fqdn] %>
+<% end -%>
+<% else -%>
+report_host                      = <%= node[:fqdn] %>
+<% end -%>
+
+# If a write by a replication slave to its relay log causes the current log file size to exceed the value of this variable, the slave rotates the relay logs (closes the current file 
+# and opens the next one). If max_relay_log_size is 0, the server uses max_binlog_size for both the binary log and the relay log. If max_relay_log_size is greater than 0, it constrains 
+# the size of the relay log, which enables you to have different sizes for the two logs. You must set max_relay_log_size to between 4096 bytes and 1GB (inclusive), or to 0. 
+# The default value is 0.
+max_relay_log_size               = <%= node[:mysql][:my_cnf][:max_relay_log_size] %>
+
+# Disables or enables automatic purging of relay log files as soon as they are not needed any more. The default value is 1 (ON).
+relay_log_purge                  = <%= node[:mysql][:my_cnf][:relay_log_purge] %>
+
+# The maximum amount of space to use for all relay logs.
+relay_log_space_limit            = <%= node[:mysql][:my_cnf][:relay_log_space_limit] %>
+
+# File and Dir Name/Path Specifications
+master_info_file                 = <%= @instance_prefix %>/data/master.info
+relay_log                        = <%= @instance_prefix %>/relay-log/relay
+relay_log_index                  = <%= @instance_prefix %>/relay-log/relay.index
+relay_log_info_file              = <%= @instance_prefix %>/relay-log/relay-log.info
+
+# Enable binary logging. The server logs all statements that change data to the binary log, which is used for backup and replication. 
+log_bin                          = <%= @instance_prefix %>/bin-log/mysql-bin.log
+
+# You can select the binary logging format explicitly by starting the MySQL server with --binlog-format=type. The supported values for type are:
+#  STATEMENT causes logging to be statement based.
+#  ROW causes logging to be row based.
+#  MIXED causes logging to use mixed format.
+#
+# In MySQL 5.5, the default binary logging format is STATEMENT.
+#
+<% if node.role?("mysql-adhoc") -%> 
+  <% if node['mysql']['my_cnf']["#{@instance}"]['binlog_format'] -%>
+binlog_format                    = <%= node[:mysql][:my_cnf][@instance][:binlog_format] %>
+<% else -%>
+binlog_format                    = <%= node[:mysql][:my_cnf][:binlog_format] %>
+  <% end -%>
+<% else -%>
+binlog_format                    = <%= node[:mysql][:my_cnf][:binlog_format] %>
+<% end -%>
+
+# The size of the cache to hold the SQL statements for the binary log during a transaction. A binary log cache is allocated for each client if the server supports any 
+# transactional storage engines and if the server has the binary log enabled (--log-bin option). If you often use large, multiple-statement transactions, you can increase 
+# this cache size to get better performance.
+# 
+# It is also important to avoid a situation where bin_log cache needs exceeds this value, as it will lead to data being written to /tmp, such as:
+#    /tmp/ib5CHXkR (deleted)
+# Which consume swap space, and are generally annoying.
+#
+binlog_cache_size                = <%= node[:mysql][:my_cnf][:binlog_cache_size] %>
+
+# Specifies that queries replayed by the slave SQL thread on a MySQL slave will be logged. The standard MySQL server will not log any queries executed by the slave``s SQL thread.
+log_slow_slave_statements        = ON
+
+# Normally, a slave does not log to its own binary log any updates that are received from a master server. This option tells the slave to log the updates performed by its SQL thread 
+# to its own binary log. For this option to have any effect, the slave must also be started with the --log-bin option to enable binary logging.
+log_slave_updates
+
+# If a write to the binary log causes the current log file size to exceed the value of this variable, the server rotates the binary logs (closes the current file and opens the next one). 
+# The minimum value is 4096 bytes. The maximum and default value is 1GB. If max_relay_log_size is 0, the value of max_binlog_size applies to relay logs as well.
+max_binlog_size                  = <%= node[:mysql][:my_cnf][:max_binlog_size] %>
+
+# If we need to split a DB to a new slave/pair, cutover can be aided by managing replication with the following
+#binlog_do_db                    = <%= node[:mysql][:my_cnf][:binlog_do_db] %>
+#binlog_ignore_db                = <%= node[:mysql][:my_cnf][:binlog_ignore_db] %>
+
+# The number of days for automatic binary log file removal. 
+expire_logs_days                 = <%= node[:mysql][:my_cnf][:expire_logs_days] %>
+
+# We do not propagate changes to MySQL tables, but instead manage all perms per server
+replicate_ignore_table           = mysql.columns_priv
+replicate_ignore_table           = mysql.db
+replicate_ignore_table           = mysql.host
+replicate_ignore_table           = mysql.procs_priv
+replicate_ignore_table           = mysql.tables_priv
+replicate_ignore_table           = mysql.user
+
+skip-slave-start
+
+#
+# * InnoDB
+#
+# InnoDB is enabled by default with a 10MB datafile in /var/lib/mysql/.
+# Read the manual for more InnoDB related options. There are many!
+#
+# * Security Features
+#
+# Read the manual, too, if you want chroot!
+# chroot = /var/lib/mysql/
+#
+# For generating SSL certificates I recommend the OpenSSL GUI "tinyca".
+#
+# ssl-ca=/etc/mysql/cacert.pem
+# ssl-cert=/etc/mysql/server-cert.pem
+# ssl-key=/etc/mysql/server-key.pem
+# ----------------------------------------------
+
+
+# InnoDB Buffers
+#
+# The size in bytes of the memory buffer InnoDB uses to cache data and indexes of its tables. The default value is 8MB. The larger you set this value, the less disk I/O is needed to access 
+# data in tables. On a dedicated database server, you may set this to up to 80% of the machine physical memory size. However, do not set it too large because competition for physical memory 
+# might cause paging in the operating system. Also, the time to initialize the buffer pool is roughly proportional to its size. On large installations, this initialization time may be 
+# significant. For example, on a modern Linux x86_64 server, initialization of a 10GB buffer pool takes approximately 6 seconds. See Section 7.6.2, “The InnoDB Buffer Pool”
+<% if node.role?("mysql-adhoc") -%>
+<% if node['mysql']['my_cnf']["#{@instance}"]['innodb_buffer_pool_size'] -%>
+innodb_buffer_pool_size          = <%= node[:mysql][:my_cnf][@instance][:innodb_buffer_pool_size] %>
+<% else -%>
+innodb_buffer_pool_size          = <%= node[:mysql][:my_cnf][:innodb_buffer_pool_size] %> 
+<% end -%>
+<% else -%>
+innodb_buffer_pool_size          = <%= node[:mysql][:my_cnf][:innodb_buffer_pool_size] %> 
+<% end -%>
+
+# The size in bytes of a memory pool InnoDB uses to store data dictionary information and other internal data structures. The more tables you have in your application, the more memory you 
+# need to allocate here. If InnoDB runs out of memory in this pool, it starts to allocate memory from the operating system and writes warning messages to the MySQL error log. The default value 
+# is 1MB.
+innodb_additional_mem_pool       = <%= node[:mysql][:my_cnf][:innodb_additional_mem_pool] %> 
+
+# The size in bytes of the buffer that InnoDB uses to write to the log files on disk. The default value is 1MB. Sensible values range from 1MB to 8MB. A large log buffer enables large 
+# transactions to run without a need to write the log to disk before the transactions commit. Thus, if you have big transactions, making the log buffer larger saves disk I/O.
+innodb_log_buffer_size           = <%= node[:mysql][:my_cnf][:innodb_log_buffer_size] %> 
+
+# for xtradb management of individual tables
+# Unlike MyISAM, InnoDB does not allow users to copy datafiles for a single table between servers. If exported with XtraBackup, a table can now be imported on another server running XtraDB.
+# This feature implements the abililty to import arbitrary .ibd files exported using the XtraBackup --export option. The innodb_import_table_from_xtrabackup variable makes to convert .ibd 
+# file during import process.
+innodb_import_table_from_xtrabackup = 1
+
+#========================================================
+# InnoDB Config
+#========================================================
+
+
+# In the 3rd edition of High Performance MySQL, the configuration chapter basically starts and ends with:
+# “you need to set innodb_buffer_pool_size and innodb_log_file_size and not much else” 
+
+# When you enable the option, the maximum number of undo slots is extended to 4072, instead of the default fixed value of 1024. 
+#innodb_extra_undoslots          = <%= node[:mysql][:my_cnf][:innodb_extra_undoslots] %>
+
+# 
+#innodb_flush_log_at_trx_commit  = 0 # only write to log and sync once per second
+#innodb_flush_log_at_trx_commit  = 1 # write and sync log at every tx commit - for true ACID durability.
+#innodb_flush_log_at_trx_commit  = 2 # write at every tx commit, but only sync once per second
+innodb_flush_log_at_trx_commit   = <%= node[:mysql][:my_cnf][:innodb_flush_log_at_trx_commit] %>
+
+# If the value of this variable is greater than 0, the MySQL server synchronizes its binary log to disk (using fdatasync()) after every sync_binlog writes to the binary log. There is one 
+# write to the binary log per statement if autocommit is enabled, and one write per transaction otherwise. The default value of sync_binlog is 0, which does no synchronizing to disk. A 
+# value of 1 is the safest choice, because in the event of a crash you lose at most one statement or transaction from the binary log. However, it is also the slowest choice (unless the 
+# disk has a battery-backed cache, which makes synchronization very fast).
+sync_binlog                      = <%= node[:mysql][:my_cnf][:sync_binlog] %>
+
+# Whether innodb_support_xa is needed or not is depend on the each user. If innodb_support_xa=1 and using binlog, 2 times fsync() is done for the each transaction. It is “prepare” fsync() 
+# and “commit” fsync(), the writing binlog for the transaction is done between the fsyncs. So, it affects to performance clearly. Performance without XA can be twice as good as with XA 
+# if binary logs are enabled as Innodb will need to flush its log buffer only once. So, if you are using —log-bin with innodb tables it makes sense to set —innodb-support-xa=0 There is the 
+# possibility that this will require recovery from a power failure/crash but performance gains are significant.
+innodb_support_xa                = <%= node[:mysql][:my_cnf][:innodb_support_xa] %>
+
+# This is an existing MySQL 5.1 system variable. It determines the method InnoDB uses to flush its data and log files. (See innodb_flush_method in 
+# the MySQL 5.1 Reference Manual).
+#
+# The following values are allowed:
+# 
+#	fdatasync: use fsync() to flush both the data and log files.
+#	O_SYNC: use O_SYNC to open and flush the log files; use fsync() to flush the data files.
+#	O_DIRECT: use O_DIRECT (or directio() on Solaris) to open the data files; use fsync() to flush both the data and log files.
+#	ALL_O_DIRECT: use O_DIRECT open and flush both the data and the log files. This value was added in Percona Server release 5.1.54-12.5.
+#innodb_flush_method             = fdatasync 
+#innodb_flush_method             = O_DSYNC
+#innodb_flush_method             = O_DIRECT
+#innodb_flush_method             = ALL_O_DIRECT
+innodb_flush_method              = <%= node[:mysql][:my_cnf][:innodb_flush_method] %> 
+
+# This is an existing InnoDB variable used to attempt flushing dirty pages in a way that avoids I/O bursts at checkpoints. In XtraDB, the default value is ON
+innodb_adaptive_flushing
+
+# data directory for where innodb logs are stored
+innodb_log_group_home_dir        = <%= @instance_prefix %>/data
+
+# number of innodb log files used
+innodb_log_files_in_group        = <%= node[:mysql][:my_cnf][:innodb_log_files_in_group] %> # default 2, more = potentially more fsyncs
+
+# The innodb_log_file_size should be defined by the number of transactions being performed. You want to tune the log file size to ensure that it can host most 
+# transactions, minimizing any need for flushing and checkpointing the logs, however smaller transaction log files optimize recovery times. The larger the logs, 
+# the slower the recovery process for instances of a crash or a dirty shutdown. A smaller innodb_log_file_size can be the difference between recovering after a 
+# crash in a matter of minutes or having to wait hours.
+#
+# Identifying an Optimized innodb_log_file_size
+# The procedure to measure the rate of log writes in MB per second is to sample `SHOW ENGINE INNODB STATUS` and to identify the log sequence data.
+#
+# Taking samples at 60 second intervals and using the data with ($sample_2 - $sample_1) / 1024 / 1024 allows us to calculate the rate.
+#
+#      Log sequence number 266555545743
+#      Log sequence number 266555886706
+#      Log sequence number 266556181299
+#      Log sequence number 266556530982
+#      
+#      mysql> SELECT (266556181299 - 266555886706) / 1024 / 1024 AS MB_per_min;
+#      +------------+
+#      | MB_per_min |
+#      +------------+
+#      | 0.28094578 |
+#      +------------+
+#      1 row in set (0.00 sec)
+#
+#      mysql> SELECT (266556530982 - 266556181299) / 1024 / 1024 AS MB_per_min;
+#      +------------+
+#      | MB_per_min |
+#      +------------+
+#      | 0.33348370 |
+#      +------------+
+#      1 row in set (0.00 sec)
+#
+# This indicates that the server is using at most 20MB an hour, meaning we could actually get away with two log files of 10M each.
+# It is recommended that we sample the rate at which data is being written to the logs over an extended period of time and look to see if a reduction in file size is warranted.
+# 
+innodb_log_file_size             = <%= node[:mysql][:my_cnf][:innodb_log_file_size] %> 
+
+# data directory for where innodb datafiles are stored
+innodb_data_home_dir             = <%= @instance_prefix %>/data
+
+# the innodb data file name/size/magic
+innodb_data_file_path            = <%= node[:mysql][:my_cnf][:innodb_data_file_path] %>
+
+# make a tablespace per table instead of all lumped together
+# NOTE: you can't just move the files to another server or directory - read up.
+# NOTE: System tablespace is still used for undo records
+innodb_file_per_table
+
+# max open .ibd files, need at least one per table with file_per_table
+innodb_open_files                = <%= node[:mysql][:my_cnf][:innodb_open_files] %> 
+
+# For all servers with SATA drives, it is best to set the following two innodb IO thread counts equal to the number of active spindles.
+# The number of I/O threads for read operations in InnoDB. The default value is 6
+innodb_read_io_threads           = <%= node[:mysql][:my_cnf][:innodb_read_io_threads] %>
+
+# The number of I/O threads for write operations in InnoDB. The default value is 6.
+innodb_write_io_threads          = <%= node[:mysql][:my_cnf][:innodb_write_io_threads] %>
+
+# An upper limit on the I/O activity performed by the InnoDB background tasks, such as flushing pages from the buffer pool and merging data from the insert buffer. 
+# The default value is 200. For busy systems capable of higher I/O rates, you can set a higher value at server startup, to help the server handle the background 
+# maintenance work associated with a high rate of row changes. This variable represents the number of disk I/O operations InnoDB will assume the server can perform 
+# per second. Since a single 15k Sas drive can perform somewhere between 100 and 200 iops, it is recommended that a server with 6 15k SaS drives have this value 
+# set to 6(150) or 800...
+innodb_io_capacity               = <%= node[:mysql][:my_cnf][:innodb_io_capacity] %>
+
+# Innodb has the means to tune thread concurrency based on load, and thus it is recommended that it be set to 0 to allow InnoDB to tune itself. Only if contention is seen, 
+# is it suggested that this be set to a fixed limit. InnoDB tries to keep the number of operating system threads concurrently inside InnoDB less than or equal to the limit 
+# given by this variable. A recommended value is 2 times the number of CPUs plus the number of disks. 
+innodb_thread_concurrency        = <%= node[:mysql][:my_cnf][:innodb_thread_concurrency] %>
+
+#========================================================
+# Event Scheduler
+#========================================================
+event_scheduler                  = <%= node[:mysql][:my_cnf][:event_scheduler] %>
+
+#========================================================
+# Client program configs
+#========================================================
+[mysqldump]
+quick
+quote-names
+max_allowed_packet               = 16M
+
+[mysql]
+#no-auto-rehash # faster start of mysql but no tab completition
+
+[isamchk]
+key_buffer                       = 512M
+sort_buffer_size                 = 512M
+read_buffer                      = 8M
+write_buffer                     = 2M
+
+[myisamchk]
+key_buffer                       = 512M
+sort_buffer_size                 = 512M
+read_buffer                      = 8M
+write_buffer                     = 16M
+
+[mysqlhotcopy]
+interactive-timeout
+
+
+#
+# * IMPORTANT: Additional settings that can override those from this file!
+#   The files must end with '.cnf', otherwise they'll be ignored.
+#
+#!includedir <%= @instance_prefix %>/etc/mysql/conf.d/

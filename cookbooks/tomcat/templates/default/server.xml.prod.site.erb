@@ -1,0 +1,158 @@
+
+<Server port="8005" shutdown="SHUTDOWN">
+
+    <!--APR library loader. Documentation at /docs/apr.html -->
+    <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+    <!--Initialize Jasper prior to webapps are loaded. Documentation at /docs/jasper-howto.html -->
+    <Listener className="org.apache.catalina.core.JasperListener" />
+    <!-- Prevent memory leaks due to use of particular java/javax APIs-->
+    <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+    <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+    <Listener className="com.thethrum.ext.jedis.JndiPoolShutdownListener"/>
+    <!-- JMX Support for the Tomcat server. Documentation at /docs/non-existent.html -->
+    <Listener className="org.apache.catalina.mbeans.JmxRemoteLifecycleListener" rmiRegistryPortPlatform="10001" rmiServerPortPlatform="10002" />
+
+    <!-- Global JNDI resources
+       Documentation at /docs/jndi-resources-howto.html
+    -->
+
+    
+    <GlobalNamingResources>
+        <!-- This is for the manager app's auth  -->
+        <Resource name="UserDatabase" auth="Container"
+                  type="org.apache.catalina.UserDatabase"
+                  description="User database that can be updated and saved"
+                  factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+                  pathname="conf/tomcat-users.xml" />
+
+        <Resource name="redis/config" auth="Container"
+                  type="com.thethrum.ext.jedis.Pool"
+                  factory="com.thethrum.ext.jedis.JedisPoolResourceFactory"
+                  hostname="redis-config.thethrum.com"
+                  size="100"
+                  />
+
+        <Resource name="jdbc/user" auth="Container" type="javax.sql.DataSource"
+                  maxActive="60" maxIdle="6" maxWait="120000" minEvictableIdleTimeMillis="90000"
+                  removeAbandoned="true" removeAbandonedTimeout="60" logAbandoned="true"
+                  username="instance" password="SOMEPASSHERE" driverClassName="com.mysql.jdbc.Driver"
+                  testWhileIdle="true" testOnBorrow="true" validationQuery="/* ping */"
+                  timeBetweenEvictionRunsMillis="30000"
+                  url="jdbc:mysql://masteruserdb.thethrum.com:3306/user?${jdbc.opts.prod}"/>
+
+        <Resource name="jdbc/instance" auth="Container" type="javax.sql.DataSource"
+                  maxActive="100" maxIdle="6" maxWait="120000" minEvictableIdleTimeMillis="90000"
+                  removeAbandoned="true" removeAbandonedTimeout="60" logAbandoned="true"
+                  username="instance" password="SOMEPASSHERE" driverClassName="com.mysql.jdbc.Driver"
+                  testWhileIdle="true" testOnBorrow="true" validationQuery="/* ping */"
+                  timeBetweenEvictionRunsMillis="30000"
+                  url="jdbc:mysql://masterinstancedb.thethrum.com:3306/nextgame?${jdbc.opts.prod}"/>
+
+        <Resource name="jdbc/instance-ro" auth="Container" type="javax.sql.DataSource"
+                  maxActive="60" maxIdle="6" maxWait="120000" minEvictableIdleTimeMillis="90000"
+                  removeAbandoned="true" removeAbandonedTimeout="60" logAbandoned="true"
+                  username="instance" password="SOMEPASSHERE" driverClassName="com.mysql.jdbc.Driver"
+                  testWhileIdle="true" testOnBorrow="true" validationQuery="/* ping */"
+                  timeBetweenEvictionRunsMillis="30000"
+                  url="jdbc:mysql://roinstancedb.thethrum.com:3306/nextgame?${jdbc.opts.prod}"/>
+
+        <Resource name="jdbc/sessions" auth="Container" type="javax.sql.DataSource"
+                  maxActive="40" maxIdle="4" maxWait="120000" minEvictableIdleTimeMillis="15000"
+                  removeAbandoned="true" removeAbandonedTimeout="60" logAbandoned="true"
+                  username="instance" password="SOMEPASSHERE" driverClassName="com.mysql.jdbc.Driver"
+                  testWhileIdle="true" testOnBorrow="true" validationQuery="/* ping */"
+                  timeBetweenEvictionRunsMillis="30000"
+                  url="jdbc:mysql://masterinstancedb.thethrum.com:3306/ngsessions?${jdbc.opts.prod}"/>
+
+        <Resource name="jdbc/socialgames" auth="Container" type="javax.sql.DataSource"
+                  maxActive="60" maxIdle="6" maxWait="120000" minEvictableIdleTimeMillis="90000"
+                  removeAbandoned="true" removeAbandonedTimeout="60" logAbandoned="true"
+                  username="instance" password="SOMEPASSHERE" driverClassName="com.mysql.jdbc.Driver"
+                  testWhileIdle="true" testOnBorrow="true" validationQuery="/* ping */"
+                  timeBetweenEvictionRunsMillis="30000"
+                  url="jdbc:mysql://mastersocialgamesdb.thethrum.com:3306/socialgames?${jdbc.opts.prod}"/>
+
+        <Resource name="web/ForwardingRegistry" auth="Container"
+                  type="com.thethrum.core.forward.Registry"
+                  description="Registry for forwarding resource requests to the appropriate context."
+                  factory="com.thethrum.core.forward.RegistryFactory" />
+
+    </GlobalNamingResources>
+
+    <Service name="Catalina">
+        <!--The connectors can use a shared executor, you can define one or more named thread pools-->
+        <Executor name="tomcatThreadPool"
+                  namePrefix="tomcat-"
+                  maxThreads="800"
+                  minSpareThreads="20"
+                  maxIdleTime="15000"
+                  />
+        
+        <!-- for direct hits -->
+        <Connector port="8080" 
+                   executor="tomcatThreadPool"
+                   protocol="HTTP/1.1" 
+                   redirectPort="8443" 
+                   emptySessionPath="true"
+                   
+                   acceptCount="50"
+                   maxKeepAliveRequests="100"
+                   keepAliveTimeout="10000"
+                   connectionTimeout="10000" 
+                   
+                   compression="off" 
+                   enableLookups="false"
+                   server="Apache"
+                   />
+        
+        <!-- for direct hits -->
+        <!-- secure=false is intentional to not use secure cookies -->
+        <Connector port="8443" 
+                   executor="tomcatThreadPool"
+                   protocol="HTTP/1.1" 
+                   redirectPort="8080" 
+                   emptySessionPath="true"
+                   
+                   acceptCount="50"
+                   maxKeepAliveRequests="100"
+                   keepAliveTimeout="10000"
+                   connectionTimeout="10000" 
+                   
+                   compression="off" 
+                   enableLookups="false"
+                   server="Apache"
+                   
+                   scheme="https" 
+                   secure="false" 
+                   SSLEnabled="true"
+                   SSLCertificateFile="${catalina.home}/cert/thethrum.com_wildcard.crt"
+                   SSLCertificateKeyFile="${catalina.home}/cert/thethrum.com_wildcard.pem"
+                   SSLPassword="SOMEOTHERPASSHERE"
+                   keystoreFile="${catalina.home}/cert/thethrum.com_selfsigned.jks" 
+                   keystorePass="THISPASSHERE"
+                   keyAlias="tomcat"
+                   keystoreType="JKS"
+                   clientAuth="false" 
+                   sslProtocol="TLS"
+                   />
+        
+        <Engine name="Catalina" defaultHost="localhost">
+            
+            <Host name="localhost"  appBase="webapps"
+                  unpackWARs="true" autoDeploy="true"
+                  xmlValidation="false" xmlNamespaceAware="false">
+
+                <!-- Load-balancer will set X-Forwarded-For header with real client IP -->
+                <!-- See docs for fields: http://tomcat.apache.org/tomcat-6.0-doc/config/valve.html#Access_Log_Valve -->
+                <!-- log format is std "combined" format plus 1 additional field %D = timing -->
+                <!-- don't rotate the logs, in production logrotate will handle -->
+                <Valve className="org.apache.catalina.valves.AccessLogValve" 
+                       directory="${catalina.logs}"  
+                       prefix="access" suffix=".log" 
+                       rotatable="false"
+                       pattern='%{X-Forwarded-For}i %l %u %t "%r" %s %b "%{Referer}i" "%{User-Agent}i" %D'
+                       resolveHosts="false"/>
+            </Host>
+        </Engine>
+    </Service>
+</Server>

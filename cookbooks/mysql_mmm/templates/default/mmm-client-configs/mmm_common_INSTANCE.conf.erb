@@ -1,0 +1,60 @@
+active_master_role   writer
+
+<host default>
+   cluster_interface         eth0
+
+   pid_path                  /var/run/mmm_agentd-<%= @instance %>.pid
+   bin_path                  /usr/lib/mysql-mmm/
+
+   replication_user          <%= @repl_user %>
+   replication_password      <%= @repl_pass %>
+
+   agent_user                <%= @agent_user %>
+   agent_password            <%= @agent_pass %>
+</host>
+
+<host mysql-<%= @instance %>01>
+   mode                      master
+   ip                        <%= @host1_ip %>
+   mysql_port                3306
+   agent_port                9989
+   mysql_pidfile             /var/run/mysqld/mysqld-<%= @instance %>.pid
+   mysql_cnf                 /local/mysql-<%= @instance %>/etc/mysql/my.cnf
+   mysql_rcscript            /etc/init.d/mysql-<%= @instance %>
+   peer                      mysql-<%= @instance %>02
+</host>
+
+<host mysql-<%= @instance %>02>
+   mode                      master
+   ip                        <%= @host2_ip %>
+   mysql_port                3306
+   agent_port                9989
+   mysql_pidfile             /var/run/mysqld/mysqld-<%= @instance %>.pid
+   mysql_cnf                 /local/mysql-<%= @instance %>/etc/mysql/my.cnf
+   mysql_rcscript            /etc/init.d/mysql-<%= @instance %>
+   peer                      mysql-<%= @instance %>01
+</host>
+
+<host mysql-<%= @instance %>03>
+   mode                      slave
+   ip                        <%= @host3_ip %>
+   mysql_port                3306
+   agent_port                9989
+   mysql_pidfile             /var/run/mysqld/mysqld-<%= @instance %>.pid
+   mysql_cnf                 /local/mysql-<%= @instance %>/etc/mysql/my.cnf
+   mysql_rcscript            /etc/init.d/mysql-<%= @instance %>
+</host>
+
+<role writer>
+   hosts                     mysql-<%= @instance %>01, mysql-<%= @instance %>02
+   ips                       <%= @write_ip %>
+   mode                      exclusive
+</role>
+
+<role reader>
+   hosts                     mysql-<%= @instance %>01, mysql-<%= @instance %>02
+   ips                       <%= @read_ip %>
+   #mode                     balanced
+   mode                      exclusive
+</role>
+

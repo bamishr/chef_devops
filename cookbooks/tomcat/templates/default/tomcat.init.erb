@@ -1,0 +1,119 @@
+#!/bin/bash
+#
+# Linux startup script for Tomcat, based on our customized version in svn:Infrastructure/Tomcat
+#
+#=================================================
+
+ulimit -n 65536
+
+JAVA_HOME=<%= node["java"]["java_home"] %>
+CATALINA_HOME=<%= node["tomcat"]["home"] %>/runtime
+
+# grab CATALINA_BASE from host-specific conf file
+source /etc/tomcat/base.conf
+
+# TODO stop using base.conf and set CATALINA_BASE here
+#CATALINA_BASE = /usr/local/tomcat/bases/<%= node["app_environment"] %>
+
+CATALINA_LOGS=<%= node["tomcat"]["log_dir"] %>
+
+PIDF=<%= node["tomcat"]["log_dir"] %>/tomcat.pid
+DISPLAY=127.0.0.1:0.0
+
+export CATALINA_HOME CATALINA_BASE CATALINA_LOGS JAVA_HOME DISPLAY
+
+CHUSER=<%= node["tomcat"]["user"] %>
+DAEMON=$CATALINA_HOME/bin/catalina.sh
+
+<% if node["tomcat"]["headless"].nil? -%>
+  <% if node.role?("dev") -%>
+#
+# Sets the commandline arguments.
+#
+# GC and JMX opts are in cataline.sh
+CATALINA_OPTS="<%= node["tomcat"]["java_options"] %> <%= node["tomcat"]["jpda"] %>"
+  <% else -%>
+#
+# Sets the default commandline arguments.
+#
+# GC and JMX opts are in cataline.sh
+CATALINA_OPTS="<%= node["tomcat"]["java_options"] %>"
+  <% end -%>
+<% elsif node.role?("dev") -%>
+#
+# Sets the commandline arguments.
+#
+# GC and JMX opts are in cataline.sh
+CATALINA_OPTS="<%= node["tomcat"]["java_options"] %> <%= node["tomcat"]["jpda"] %> <%= node["tomcat"]["headless"] %>"
+<% else -%>
+#
+# Sets the default commandline arguments.
+#
+# GC and JMX opts are in cataline.sh
+CATALINA_OPTS="<%= node["tomcat"]["java_options"] %> <%= node["tomcat"]["headless"] %>"
+<% end -%>
+
+CATALINA_PID=$PIDF
+export CATALINA_OPTS CATALINA_PID
+ARGS=
+
+test -x $DAEMON || exit 0
+set -e
+
+# note we let catalina.sh write the pid file
+case "$1" in
+    start)
+	    echo -n "Starting tomcat: "
+        
+	    if [[ -n "$CHUSER" && $CHUSER != $USER ]]; then
+		echo -n "as $CHUSER .." 
+  	        su $CHUSER -c "$DAEMON start $ARGS"
+	    else
+         <% if node.role?("dev") -%>
+  	        $DAEMON jdpa start $ARGS 1>&2
+         <% else -%>
+           $DAEMON start $ARGS 1>&2
+         <% end -%>
+        fi
+	    echo .
+	    ;;
+    stop)
+        if [ -f $PIDF ]; then
+	        PID=`cat $PIDF`
+	        if [ -d /proc/$PID ]; then
+                # try to stop it nicely, give it 5 seconds to die, otherwise kill it hard
+	            echo -n "Stopping $DESC: $NAME "
+
+		    if [[ -n "$CHUSER" && $CHUSER != $USER ]]; then
+			su  $CHUSER -c "$DAEMON stop"
+		    else 
+			$DAEMON stop
+		    fi
+                
+	            sleep 5
+	            if [ -d /proc/$PID ]; then
+		            echo -n "..killing dead.."
+		            kill -9 $PID
+                fi
+	            rm -f $PIDF
+	            echo "."
+	        else
+	            echo "No process w/pid $PID running."
+	            rm -f $PIDF
+	        fi
+	    else
+	        echo "No pid file, assuming not running: $NAME."
+	    fi
+	    ;;
+    restart)
+	    $0 stop
+	    sleep 2 # give it time to free the port
+	    $0 start
+	    ;;
+    *)
+	    echo "Usage: $0 {start|stop|restart}"
+	    exit 1
+esac
+
+exit 0
+

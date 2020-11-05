@@ -1,0 +1,13 @@
+//
+//  ACLs
+//
+<% if node[:bind9][:acls] %>
+<% node[:bind9][:acls].keys.each do |acl| -%>
+//
+// <%= acl %>
+//
+acl <%= acl %> {
+  <% node[:bind9][:acls][:acl].each do |addr| -%>
+  <%= acl %>;
+  <% end %>
+};

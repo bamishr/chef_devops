@@ -1,0 +1,71 @@
+options {
+
+        directory "/var/cache/bind";
+
+        // If there is a firewall between you and nameservers you want
+        // to talk to, you may need to fix the firewall to allow multiple
+        // ports to talk.  See http://www.kb.cert.org/vuls/id/800113
+
+        // If your ISP provided one or more IP addresses for stable
+        // nameservers, you probably want to use them as forwarders.
+        // Uncomment the following block, and insert the addresses replacing
+        // the all-0's placeholder.
+
+        // forwarders {
+        //      0.0.0.0;
+        // };
+
+        //========================================================================
+        // If BIND logs error messages about the root key being expired,
+        // you will need to update your keys.  See https://www.isc.org/bind-keys
+        //========================================================================
+        dnssec-validation <%= node[:bind9][:dnssec_validation] %>;
+
+        // http://www.ietf.org/rfc/rfc1035.txt
+        auth-nxdomain no;    # conform to RFC1035
+
+        // listen-on-v6 turns on BIND to listen for IPv6 queries.
+        listen-on-v6 { <%= node[:bind9][:listen_on_v6] %>; };
+
+        // null version
+        version "<%= node[:bind9][:version] %>";
+
+
+        <% if node[:bind9][:allow_query] %>
+        // allow-query
+        // Specifies which hosts are allowed to ask ordinary questions. allow-query may also be specified 
+        // in the zone statement, in which case it overrides the options allow-query statement. If not 
+        // specified, the default is to allow queries from all hosts.
+        allow-query { <%= node[:bind9][:allow_query] %>; };
+        <% end %>
+       
+        <% if node[:bind9][:allow_recursion] %>
+        // Specifies which hosts are allowed to make recursive queries through this server. If not specified, 
+        // the default is to allow recursive queries from all hosts. Note that disallowing recursive queries 
+        // for a host does not prevent the host from retrieving data that is already in the server's cache. 
+        allow-recursion { <%= node[:bind9][:allow_recursion] %>; };
+        <% end %>
+        
+        // Specifies which hosts are allowed to receive zone transfers from the server. allow-transfer may 
+        // also be specified in the zone statement, in which case it overrides the options allow-transfer 
+        // statement. If not specified, the default is to allow transfers from all hosts.
+        allow-transfer { <%= node[:bind9][:allow_transfer] %>; };
+
+        // The forwarding facility can be used to create a large site-wide cache on a few servers, reducing traffic over links to external nameservers.
+        <% if node[:bind9][:enable_forwarding] %>
+        forwarders { <% node[:bind9][:forwarders].each do |forwarder| -%> 
+          <%= forwarder %>;
+        <% end %>
+        };
+        <% end %>
+
+        // Specifies which hosts are allowed to submit Dynamic DNS updates for master zones. The default is 
+        // to deny updates from all hosts.
+        // 
+        // We lock this down with TSIG (http://en.wikipedia.org/wiki/TSIG) keys so will use 10.x
+        <% if node[:bind9][:allow_update] %>
+        allow-update { <%= node[:bind9][:allow_update] %>; };
+        <% end %>
+
+};
+

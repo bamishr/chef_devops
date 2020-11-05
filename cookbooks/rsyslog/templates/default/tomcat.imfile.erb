@@ -1,0 +1,19 @@
+$DirCreateMode 0755
+$FileCreateMode 0644
+
+###
+<% @tomcat_matches['programs'].each do |p| -%>
+### <%= p %>-app
+$InputFileName /var/log/tomcat/<%= p %>-app.log
+$InputFileStateFile tomcat-<%= p %>-app
+$InputFileTag tomcat-<%= p %>-app:
+$InputRunFileMonitor
+<% end -%>
+<% @tomcat_matches['otherlogs'].each do |p| -%>
+### <%= p %>
+$InputFileName /var/log/tomcat/<%= p %>.log
+$InputFileStateFile tomcat-<%= p %>
+$InputFileTag tomcat-<%= p %>:
+$InputRunFileMonitor
+<% end -%>
+###

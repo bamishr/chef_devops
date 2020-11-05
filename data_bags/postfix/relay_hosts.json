@@ -1,0 +1,6 @@
+{
+  "id": "relay_hosts",
+  "ec2": {
+    "us-east-1c": "email-smtp.us-east-1.amazonaws.com:25"
+  }
+}

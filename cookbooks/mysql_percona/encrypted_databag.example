@@ -1,0 +1,67 @@
+{
+  "dev_users": {
+    "random": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980"
+  },
+  "qa_users": {
+    "thatguy": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980"
+  },
+  "ops_users": {
+    "ops": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+    "thatguy": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980"
+  },
+  "aws": {
+    "aws_secret_access_key": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+    "aws_access_key_id": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980"
+  },
+  "id": "mysql",
+  "app_users": {
+    "staging": {
+      "jenkins": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "repl": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "mmm-mon": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "reports": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "repl_test": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "cacti": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "tools": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "standalone": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "platform": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980"
+    },
+    "prod": {
+      "jenkins": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "repl": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "mmm-mon": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "reports": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "repl_test": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "jasper": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "cacti": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "tools": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "standalone": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "platform": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980"
+    },
+    "dev": {
+      "jenkins": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "repl": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "mmm-mon": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "reports": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "repl_test": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "munin": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "cacti": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "tools": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "standalone": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "platform": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+      "activemq": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980"
+    }
+  },
+  "pm_users": {
+    "vanhalen": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980"
+  },
+  "admin_users": {
+    "repl": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+    "mmm": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+    "chef-client": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+    "root": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+    "debian-sys-maint": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980",
+    "clustercheck": "098132089809213890890123hhjjk123hjjkhdfshjkhjkdfshjk89908980"
+  }
+}
+

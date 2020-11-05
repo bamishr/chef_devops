@@ -1,0 +1,18 @@
+[client]
+host     = localhost
+user     = debian-sys-maint
+password = <%= @mysql_debian_passwd %>
+socket   = <%= @sock %>
+
+[mysql_upgrade]
+host     = localhost
+user     = debian-sys-maint
+password = <%= @mysql_debian_passwd %>
+socket   = <%= @sock %>
+basedir  = /usr
+
+[mysqld]
+host     = localhost
+user     = debian-sys-maint
+password = <%= @mysql_debian_passwd %>
+socket   = <%= @sock %>

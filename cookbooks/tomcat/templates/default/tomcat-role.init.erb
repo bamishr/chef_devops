@@ -1,0 +1,118 @@
+#!/bin/bash
+#
+# Linux startup script for Tomcat, based on our customized version in svn:Infrastructure/Tomcat
+#
+#=================================================
+
+# needed
+ulimit -n 65536
+
+# java
+JAVA_HOME=<%= node["java"]["java_home"] %>
+
+# tomcat root
+DISPLAY=127.0.0.1:0.0
+CHUSER=buildmaster
+CATALINA_HOME=<%= node["tomcat"]["homedir"] %>
+DAEMON=$CATALINA_HOME/bin/catalina.sh
+CATALINA_LOGS=<%= node["tomcat"]["log_dir"] %>
+
+# Process Management
+PIDDIR=<%= node["tomcat"]["piddir"] %>
+
+# confirm/create the piddir
+if [ ! -d "$PIDDIR" ]; then
+        mkdir "$PIDDIR"
+        chown <%= node["tomcat"]["user"] %> "$PIDDIR"
+fi
+
+# dev is not chef managed, but manual
+<% if node.role?("dev") -%>
+# grab CATALINA_BASE from host-specific conf file
+#source /etc/tomcat/base.conf
+CATALINA_BASE=$CATALINA_HOME/thethrum-<%= node["application"] %>
+
+# PID is default
+PIDF=$PIDDIR/tomcat.pid
+<% else -%>
+# CATALINA_BASE is managed by chef
+CATALINA_BASE=$CATALINA_HOME/thethrum-<%= node["application"] %>
+
+# PID is by role
+PIDF=$PIDDIR/tomcat-<%= node["application"] %>.pid
+<% end -%>
+
+# if a pid exists remove it
+test -e $PIDDIR/$PIDF && rm $PIDDIR/$PIDF
+
+# export the PID for the env
+CATALINA_PID=$PIDF
+
+
+#
+# Sets the commandline arguments.
+#
+# GC and JMX opts are in cataline.sh
+CATALINA_OPTS="<%= node["tomcat"]["java_options"] %>"
+
+# export our variables
+export CATALINA_HOME CATALINA_BASE CATALINA_LOGS JAVA_HOME DISPLAY CATALINA_OPTS CATALINA_PID
+
+# the start up script...
+
+test -x $DAEMON || exit 0
+set -e
+
+# note we let catalina.sh write the pid file
+case "$1" in
+    start)
+	    echo -n "Starting tomcat: "
+        
+	    if [[ -n "$CHUSER" && $CHUSER != $USER ]]; then
+		echo -n "as $CHUSER .." 
+  	        su $CHUSER -c "$DAEMON start $ARGS"
+	    else
+  	        $DAEMON start $ARGS 1>&2
+        fi
+	    echo .
+	    ;;
+    stop)
+        if [ -f $PIDF ]; then
+	        PID=`cat $PIDF`
+	        if [ -d /proc/$PID ]; then
+                # try to stop it nicely, give it 5 seconds to die, otherwise kill it hard
+	            echo -n "Stopping $DESC: $NAME "
+
+		    if [[ -n "$CHUSER" && $CHUSER != $USER ]]; then
+			su  $CHUSER -c "$DAEMON stop"
+		    else 
+			$DAEMON stop
+		    fi
+                
+	            sleep 5
+	            if [ -d /proc/$PID ]; then
+		            echo -n "..killing dead.."
+		            kill -9 $PID
+                fi
+	            rm -f $PIDF
+	            echo "."
+	        else
+	            echo "No process w/pid $PID running."
+	            rm -f $PIDF
+	        fi
+	    else
+	        echo "No pid file, assuming not running: $NAME."
+	    fi
+	    ;;
+    restart)
+	    $0 stop
+	    sleep 2 # give it time to free the port
+	    $0 start
+	    ;;
+    *)
+	    echo "Usage: $0 {start|stop|restart}"
+	    exit 1
+esac
+
+exit 0
+

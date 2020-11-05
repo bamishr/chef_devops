@@ -1,0 +1,6 @@
+# Populate app.properties
+<% @app_properties.keys().sort.each do |prop| %>
+<%= prop %>=<%= @app_properties[prop] %>
+<% end %>
+
+

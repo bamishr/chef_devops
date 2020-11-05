@@ -1,0 +1,19 @@
+zone "paws.thethrum.com" {
+
+  type master;
+  file "/var/cache/bind/db.paws.thethrum.com";
+  allow-update { key aws_ddns_tsig; };
+  allow-transfer { key zone_xfer_key; };
+  // update-policy { grant *.paws.thethrum.com. self paws.thethrum.com. CNAME; };
+
+};
+
+zone "laws.thethrum.com" {
+
+  type master;
+  file "/var/cache/bind/db.laws.thethrum.com";
+  allow-update { key aws_ddns_tsig; };
+  allow-transfer { key zone_xfer_key; };
+  // update-policy { grant *.lawsthethrum.com. self laws.thethrum.com. CNAME; };
+
+};

@@ -1,0 +1,18 @@
+//
+// Do any local configuration here
+//
+
+// Consider adding the 1918 zones here, if they are not used in your
+// organization
+include "/etc/bind/zones.rfc1918";
+
+key aws_ddns_tsig  {
+  algorithm hmac-md5;
+  secret "PW9yd9VaVsropZ3GczuxPItJMo49S1kVe2051Cx9Hbk=";
+};
+
+key zone_xfer_key {
+  algorithm HMAC-MD5;
+  secret "GaiovpR7Dujr1F6RyxHyOsoPfoqMlnDKJzKuMHyiVy4=";
+};
+

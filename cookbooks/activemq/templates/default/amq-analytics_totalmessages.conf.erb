@@ -1,0 +1,10 @@
+graph_title AMQ Analytics Total Message Count
+graph_vlabel Messages
+graph_category ActiveMQ
+graph_order amq_TotalMessageCount
+
+amq_TotalMessageCount.label TotalMessageCount
+amq_TotalMessageCount.jmxObjectName thethrum.com:BrokerName=<%= @node[:fqdn] %>,Type=Broker
+amq_TotalMessageCount.jmxAttributeName TotalMessageCount
+amq_TotalMessageCount.type COUNTER
+amq_TotalMessageCount.min 0

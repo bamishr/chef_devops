@@ -1,0 +1,387 @@
+{
+  "id": "roles",
+  "dev": {
+    "app_properties": {
+      "platform.host": "int-d-platform.thethrum.com",
+      "service-auth-token": "0bf3bd7eb003ae191e703b97afcd6e70cba1dfc98e14f6fde8f9390926ed0a99876cd62f3c8265f1d578c4c83c28d58d5c65b27481d19d61377"
+    }
+  },
+  "prod": {
+    "app_properties": {
+      "platform.host": "int-platform.thethrum.com",
+      "nagios.env": "prod"
+    }
+  },
+  "prerelease": {
+    "app_properties": {
+      "platform.host": "int-pr-platform.thethrum.com",
+      "nagios.env": "prerelease"
+    }
+  },
+  "staging": {
+    "app_properties": {
+      "platform.host": "int-s-platform.thethrum.com",
+      "nagios.env": "staging"
+    }
+  },
+  "tomcat-site": {
+    "tomcat_properties": {
+      "dev": {
+        "version": "7.0.26"
+      }
+    },
+    "tomcat_resources": {
+      "dev": {
+        "redis": {
+          "redis-hostname": "d-redis01.thethrum.com", 
+          "redis-port": "6379",
+          "redis-password": ""
+        },
+        "memcached": {
+          "memcached-servers": "d-memcached-site01.thethrum.com:11211"
+        },
+        "jms": {
+          "brokerURL": "tcp://d-jms01.thethrum.com:61616"
+        }
+      }
+    },
+    "xtralibs": { 
+      "dev": {
+        "7cc6a087459a324ede68f03448e9b069": "atomikos-tomcat-lifecycle.jar",
+        "adb14d77c8674f7c77b841f7eb68289c": "atomikos-util-3.5.8.jar",
+        "8e149c1053741c03736a52df83974dcc": "commons-codec-1.3.jar",
+        "dcdcbb47176603907c9f79a1349193eb": "commons-lang-2.3.jar",
+        "56ac2ad057458d654e0a83cffa0eb6be": "commons-pool-1.5.5.jar",
+        "9af7e3055b7650dafbdd7b81b74325e3": "context-forwarder-1.1.0.jar",
+        "1c3f8f407faf7fcf2f22030798e27f76": "core-session-1.7.2.jar",
+        "0441e86c3064b8bb7b6c38a1968b7e35": "core-util-2.1.0.jar",
+        "63c52a6b470db948774db57d712535e1": "ex-memcached-3.5.0.jar",
+        "a91a518df29c7c63a144ef10b5d6735f": "ext-atomikos-1.0.0.jar",
+        "b5f14c499e09e56406ea34f0dbfbdbd6": "ext-jedis-1.2.0.jar",
+        "31359b7d1c923121f76717ab2bc56a7f": "ext-mongo-1.1.0.jar",
+        "d33ba279987d65c9ac379017f7fb6dfd": "jedis-1.5.0.jar",
+        "0b2c157b5fe3ffa15049814f3305433f": "jcl-over-slf4j-1.6.1.jar",
+        "f09f5b5856b85b9d1b200a36355a0572": "jta-1.0.1B.jar",
+        "81afbdecb906d38236437ebc6f94bf3a": "jta.properties",
+        "b0707d398e9ad652c4d4f5d6ec51ebff": "jul-to-slf4j-1.6.1.jar",
+        "ce10f4dcf6268d918fc4b5df24a7a380": "log4j-over-slf4j-1.6.1.jar",
+        "e23ce3ebce741fcdfcf7f063a6d32c0a": "logback-classic-0.9.29.jar",
+        "ac79a282f1722e61b1886286d5055ce9": "logback-core-0.9.29.jar",
+        "1f1356d41f60f7a7c4130b32ed5189dc": "logback.xml",
+        "da4ce10d00e00ef9e77e52f6ad630290": "mongo-2.6.5.jar",
+        "dae1caa125dc979ba0275ea7cd093262": "mysql-connector-java-5.1.5.jar",
+        "bff6016da57e19fb736d0f5742ce60ac": "slf4j-api-1.6.1.jar",
+        "eeb8b45c9febec37e1b35f6cd9d3ae5e": "spymemcached-2.7.3.jar",
+        "28979b845fa041111433d9ed891dec9b": "tomcat-juli-adapters.jar",
+        "985e85554d8010204f3140669b2a6a4c": "transactions-3.5.8.jar",
+        "c2aa283836adee903dcbc7f82428ff0d": "transactions-api-3.5.8.jar",
+        "0a44f8b6ce08ee00717cb7ba379b6d24": "transactions-hibernate3-3.5.8.jar",
+        "066ed23a7144659f44a9873908837c90": "transactions-jdbc-3.5.8.jar",
+        "661782b588a88d2806b03e2f9a9f3cba": "transactions-jta-3.5.8.jar",
+        "dcd95bcb84b09897b2b66d4684c040da": "xpp3_min-1.1.4c.jar",
+        "4dfebec402e7606b2c1f66dec1773e8f": "xstream-1.3.1.jar"
+      },
+      "staging": {
+        "7cc6a087459a324ede68f03448e9b069": "atomikos-tomcat-lifecycle.jar",
+        "adb14d77c8674f7c77b841f7eb68289c": "atomikos-util-3.5.8.jar",
+        "8e149c1053741c03736a52df83974dcc": "commons-codec-1.3.jar",
+        "dcdcbb47176603907c9f79a1349193eb": "commons-lang-2.3.jar",
+        "56ac2ad057458d654e0a83cffa0eb6be": "commons-pool-1.5.5.jar",
+        "9af7e3055b7650dafbdd7b81b74325e3": "context-forwarder-1.1.0.jar",
+        "1c3f8f407faf7fcf2f22030798e27f76": "core-session-1.7.2.jar",
+        "0441e86c3064b8bb7b6c38a1968b7e35": "core-util-2.1.0.jar",
+        "63c52a6b470db948774db57d712535e1": "ex-memcached-3.5.0.jar",
+        "a91a518df29c7c63a144ef10b5d6735f": "ext-atomikos-1.0.0.jar",
+        "b5f14c499e09e56406ea34f0dbfbdbd6": "ext-jedis-1.2.0.jar",
+        "31359b7d1c923121f76717ab2bc56a7f": "ext-mongo-1.1.0.jar",
+        "d33ba279987d65c9ac379017f7fb6dfd": "jedis-1.5.0.jar",
+        "0b2c157b5fe3ffa15049814f3305433f": "jcl-over-slf4j-1.6.1.jar",
+        "f09f5b5856b85b9d1b200a36355a0572": "jta-1.0.1B.jar",
+        "81afbdecb906d38236437ebc6f94bf3a": "jta.properties",
+        "b0707d398e9ad652c4d4f5d6ec51ebff": "jul-to-slf4j-1.6.1.jar",
+        "ce10f4dcf6268d918fc4b5df24a7a380": "log4j-over-slf4j-1.6.1.jar",
+        "e23ce3ebce741fcdfcf7f063a6d32c0a": "logback-classic-0.9.29.jar",
+        "ac79a282f1722e61b1886286d5055ce9": "logback-core-0.9.29.jar",
+        "1f1356d41f60f7a7c4130b32ed5189dc": "logback.xml",
+        "da4ce10d00e00ef9e77e52f6ad630290": "mongo-2.6.5.jar",
+        "dae1caa125dc979ba0275ea7cd093262": "mysql-connector-java-5.1.5.jar",
+        "bff6016da57e19fb736d0f5742ce60ac": "slf4j-api-1.6.1.jar",
+        "eeb8b45c9febec37e1b35f6cd9d3ae5e": "spymemcached-2.7.3.jar",
+        "28979b845fa041111433d9ed891dec9b": "tomcat-juli-adapters.jar",
+        "985e85554d8010204f3140669b2a6a4c": "transactions-3.5.8.jar",
+        "c2aa283836adee903dcbc7f82428ff0d": "transactions-api-3.5.8.jar",
+        "0a44f8b6ce08ee00717cb7ba379b6d24": "transactions-hibernate3-3.5.8.jar",
+        "066ed23a7144659f44a9873908837c90": "transactions-jdbc-3.5.8.jar",
+        "661782b588a88d2806b03e2f9a9f3cba": "transactions-jta-3.5.8.jar",
+        "dcd95bcb84b09897b2b66d4684c040da": "xpp3_min-1.1.4c.jar",
+        "4dfebec402e7606b2c1f66dec1773e8f": "xstream-1.3.1.jar"
+      },
+      "prerelease": {
+        "7cc6a087459a324ede68f03448e9b069": "atomikos-tomcat-lifecycle.jar",
+        "adb14d77c8674f7c77b841f7eb68289c": "atomikos-util-3.5.8.jar",
+        "8e149c1053741c03736a52df83974dcc": "commons-codec-1.3.jar",
+        "dcdcbb47176603907c9f79a1349193eb": "commons-lang-2.3.jar",
+        "56ac2ad057458d654e0a83cffa0eb6be": "commons-pool-1.5.5.jar",
+        "9af7e3055b7650dafbdd7b81b74325e3": "context-forwarder-1.1.0.jar",
+        "1c3f8f407faf7fcf2f22030798e27f76": "core-session-1.7.2.jar",
+        "0441e86c3064b8bb7b6c38a1968b7e35": "core-util-2.1.0.jar",
+        "63c52a6b470db948774db57d712535e1": "ex-memcached-3.5.0.jar",
+        "a91a518df29c7c63a144ef10b5d6735f": "ext-atomikos-1.0.0.jar",
+        "b5f14c499e09e56406ea34f0dbfbdbd6": "ext-jedis-1.2.0.jar",
+        "31359b7d1c923121f76717ab2bc56a7f": "ext-mongo-1.1.0.jar",
+        "d33ba279987d65c9ac379017f7fb6dfd": "jedis-1.5.0.jar",
+        "0b2c157b5fe3ffa15049814f3305433f": "jcl-over-slf4j-1.6.1.jar",
+        "f09f5b5856b85b9d1b200a36355a0572": "jta-1.0.1B.jar",
+        "81afbdecb906d38236437ebc6f94bf3a": "jta.properties",
+        "b0707d398e9ad652c4d4f5d6ec51ebff": "jul-to-slf4j-1.6.1.jar",
+        "ce10f4dcf6268d918fc4b5df24a7a380": "log4j-over-slf4j-1.6.1.jar",
+        "e23ce3ebce741fcdfcf7f063a6d32c0a": "logback-classic-0.9.29.jar",
+        "ac79a282f1722e61b1886286d5055ce9": "logback-core-0.9.29.jar",
+        "1f1356d41f60f7a7c4130b32ed5189dc": "logback.xml",
+        "da4ce10d00e00ef9e77e52f6ad630290": "mongo-2.6.5.jar",
+        "dae1caa125dc979ba0275ea7cd093262": "mysql-connector-java-5.1.5.jar",
+        "bff6016da57e19fb736d0f5742ce60ac": "slf4j-api-1.6.1.jar",
+        "eeb8b45c9febec37e1b35f6cd9d3ae5e": "spymemcached-2.7.3.jar",
+        "28979b845fa041111433d9ed891dec9b": "tomcat-juli-adapters.jar",
+        "985e85554d8010204f3140669b2a6a4c": "transactions-3.5.8.jar",
+        "c2aa283836adee903dcbc7f82428ff0d": "transactions-api-3.5.8.jar",
+        "0a44f8b6ce08ee00717cb7ba379b6d24": "transactions-hibernate3-3.5.8.jar",
+        "066ed23a7144659f44a9873908837c90": "transactions-jdbc-3.5.8.jar",
+        "661782b588a88d2806b03e2f9a9f3cba": "transactions-jta-3.5.8.jar",
+        "dcd95bcb84b09897b2b66d4684c040da": "xpp3_min-1.1.4c.jar",
+        "4dfebec402e7606b2c1f66dec1773e8f": "xstream-1.3.1.jar"
+      },
+      "prod": {
+        "7cc6a087459a324ede68f03448e9b069": "atomikos-tomcat-lifecycle.jar",
+        "adb14d77c8674f7c77b841f7eb68289c": "atomikos-util-3.5.8.jar",
+        "8e149c1053741c03736a52df83974dcc": "commons-codec-1.3.jar",
+        "dcdcbb47176603907c9f79a1349193eb": "commons-lang-2.3.jar",
+        "56ac2ad057458d654e0a83cffa0eb6be": "commons-pool-1.5.5.jar",
+        "9af7e3055b7650dafbdd7b81b74325e3": "context-forwarder-1.1.0.jar",
+        "1c3f8f407faf7fcf2f22030798e27f76": "core-session-1.7.2.jar",
+        "0441e86c3064b8bb7b6c38a1968b7e35": "core-util-2.1.0.jar",
+        "63c52a6b470db948774db57d712535e1": "ex-memcached-3.5.0.jar",
+        "a91a518df29c7c63a144ef10b5d6735f": "ext-atomikos-1.0.0.jar",
+        "b5f14c499e09e56406ea34f0dbfbdbd6": "ext-jedis-1.2.0.jar",
+        "31359b7d1c923121f76717ab2bc56a7f": "ext-mongo-1.1.0.jar",
+        "d33ba279987d65c9ac379017f7fb6dfd": "jedis-1.5.0.jar",
+        "0b2c157b5fe3ffa15049814f3305433f": "jcl-over-slf4j-1.6.1.jar",
+        "f09f5b5856b85b9d1b200a36355a0572": "jta-1.0.1B.jar",
+        "81afbdecb906d38236437ebc6f94bf3a": "jta.properties",
+        "b0707d398e9ad652c4d4f5d6ec51ebff": "jul-to-slf4j-1.6.1.jar",
+        "ce10f4dcf6268d918fc4b5df24a7a380": "log4j-over-slf4j-1.6.1.jar",
+        "e23ce3ebce741fcdfcf7f063a6d32c0a": "logback-classic-0.9.29.jar",
+        "ac79a282f1722e61b1886286d5055ce9": "logback-core-0.9.29.jar",
+        "1f1356d41f60f7a7c4130b32ed5189dc": "logback.xml",
+        "da4ce10d00e00ef9e77e52f6ad630290": "mongo-2.6.5.jar",
+        "dae1caa125dc979ba0275ea7cd093262": "mysql-connector-java-5.1.5.jar",
+        "bff6016da57e19fb736d0f5742ce60ac": "slf4j-api-1.6.1.jar",
+        "eeb8b45c9febec37e1b35f6cd9d3ae5e": "spymemcached-2.7.3.jar",
+        "28979b845fa041111433d9ed891dec9b": "tomcat-juli-adapters.jar",
+        "985e85554d8010204f3140669b2a6a4c": "transactions-3.5.8.jar",
+        "c2aa283836adee903dcbc7f82428ff0d": "transactions-api-3.5.8.jar",
+        "0a44f8b6ce08ee00717cb7ba379b6d24": "transactions-hibernate3-3.5.8.jar",
+        "066ed23a7144659f44a9873908837c90": "transactions-jdbc-3.5.8.jar",
+        "661782b588a88d2806b03e2f9a9f3cba": "transactions-jta-3.5.8.jar",
+        "dcd95bcb84b09897b2b66d4684c040da": "xpp3_min-1.1.4c.jar",
+        "4dfebec402e7606b2c1f66dec1773e8f": "xstream-1.3.1.jar"
+      }
+    }
+  },
+  "tomcat-opstools": {
+    "tomcat_properties": {
+      "dev": {
+        "version": "7.0.26"
+      }
+    },
+    "tomcat_resources": {
+      "dev": {
+        "redis": {
+          "redis-hostname": "d-redis01.thethrum.com",
+          "redis-port": "6379",
+          "redis-password": ""
+        },
+        "memcached": {
+          "memcached-servers": "d-memcached-site01.thethrum.com:11211"
+        },
+        "jms": {
+          "brokerURL": "tcp://d-jms01.thethrum.com:61616"
+        }
+      }
+    },
+    "xtralibs": {
+      "staging": {
+        "7cc6a087459a324ede68f03448e9b069": "atomikos-tomcat-lifecycle.jar",
+        "adb14d77c8674f7c77b841f7eb68289c": "atomikos-util-3.5.8.jar",
+        "9aa01424a3782319bbdff1f0bc37f636": "catalina-jmx-remote.jar",
+        "8e149c1053741c03736a52df83974dcc": "commons-codec-1.3.jar",
+        "dcdcbb47176603907c9f79a1349193eb": "commons-lang-2.3.jar",
+        "56ac2ad057458d654e0a83cffa0eb6be": "commons-pool-1.5.5.jar",
+        "9af7e3055b7650dafbdd7b81b74325e3": "context-forwarder-1.1.0.jar",
+        "27b2114598f0ae9d820539050eccbc7d": "core-session-1.7.0.jar",
+        "0441e86c3064b8bb7b6c38a1968b7e35": "core-util-2.1.0.jar",
+        "68fa8f34c8dbee816ccda37b9296f812": "ecj-3.6.jar",
+        "63c52a6b470db948774db57d712535e1": "ex-memcached-3.5.0.jar",
+        "a91a518df29c7c63a144ef10b5d6735f": "ext-atomikos-1.0.0.jar",
+        "b5f14c499e09e56406ea34f0dbfbdbd6": "ext-jedis-1.2.0.jar",
+        "31359b7d1c923121f76717ab2bc56a7f": "ext-mongo-1.1.0.jar",
+        "0b2c157b5fe3ffa15049814f3305433f": "jcl-over-slf4j-1.6.1.jar",
+        "d33ba279987d65c9ac379017f7fb6dfd": "jedis-1.5.0.jar",
+        "f09f5b5856b85b9d1b200a36355a0572": "jta-1.0.1B.jar",
+        "81afbdecb906d38236437ebc6f94bf3a": "jta.properties",
+        "b0707d398e9ad652c4d4f5d6ec51ebff": "jul-to-slf4j-1.6.1.jar",
+        "ce10f4dcf6268d918fc4b5df24a7a380": "log4j-over-slf4j-1.6.1.jar",
+        "e23ce3ebce741fcdfcf7f063a6d32c0a": "logback-classic-0.9.29.jar",
+        "ac79a282f1722e61b1886286d5055ce9": "logback-core-0.9.29.jar",
+        "1f1356d41f60f7a7c4130b32ed5189dc": "logback.xml",
+        "da4ce10d00e00ef9e77e52f6ad630290": "mongo-2.6.5.jar",
+        "dae1caa125dc979ba0275ea7cd093262": "mysql-connector-java-5.1.5.jar",
+        "bff6016da57e19fb736d0f5742ce60ac": "slf4j-api-1.6.1.jar",
+        "eeb8b45c9febec37e1b35f6cd9d3ae5e": "spymemcached-2.7.3.jar",
+        "28979b845fa041111433d9ed891dec9b": "tomcat-juli-adapters.jar",
+        "985e85554d8010204f3140669b2a6a4c": "transactions-3.5.8.jar",
+        "c2aa283836adee903dcbc7f82428ff0d": "transactions-api-3.5.8.jar",
+        "0a44f8b6ce08ee00717cb7ba379b6d24": "transactions-hibernate3-3.5.8.jar",
+        "066ed23a7144659f44a9873908837c90": "transactions-jdbc-3.5.8.jar",
+        "661782b588a88d2806b03e2f9a9f3cba": "transactions-jta-3.5.8.jar",
+        "dcd95bcb84b09897b2b66d4684c040da": "xpp3_min-1.1.4c.jar",
+        "4dfebec402e7606b2c1f66dec1773e8f": "xstream-1.3.1.jar"
+      }
+    }
+  },
+  "tomcat-platform": {
+    "tomcat_properties": {
+      "dev": {
+        "version": "7.0.26"
+      },
+      "staging": {
+        "version": "7.0.26"
+      },
+      "prod": {
+        "version": "7.0.26"
+      }
+    },
+    "tomcat_resources": {
+      "dev": {
+        "redis": {
+          "redis-hostname": "d-redis01.thethrum.com",
+          "redis-port": "6379",
+          "redis-password": ""
+        },
+        "memcached": {
+          "memcached-servers": "d-memcached-site01.thethrum.com:11211"
+        },
+        "jms": {
+          "brokerURL": "tcp://d-jms01.thethrum.com:61616"
+        }
+      }
+    },
+    "xtralibs": {
+      "staging": {
+        "7cc6a087459a324ede68f03448e9b069": "atomikos-tomcat-lifecycle.jar",
+        "adb14d77c8674f7c77b841f7eb68289c": "atomikos-util-3.5.8.jar",
+        "8e149c1053741c03736a52df83974dcc": "commons-codec-1.3.jar",
+        "dcdcbb47176603907c9f79a1349193eb": "commons-lang-2.3.jar",
+        "56ac2ad057458d654e0a83cffa0eb6be": "commons-pool-1.5.5.jar",
+        "9af7e3055b7650dafbdd7b81b74325e3": "context-forwarder-1.1.0.jar",
+        "27b2114598f0ae9d820539050eccbc7d": "core-session-1.7.0.jar",
+        "0441e86c3064b8bb7b6c38a1968b7e35": "core-util-2.1.0.jar",
+        "63c52a6b470db948774db57d712535e1": "ex-memcached-3.5.0.jar",
+        "a91a518df29c7c63a144ef10b5d6735f": "ext-atomikos-1.0.0.jar",
+        "b5f14c499e09e56406ea34f0dbfbdbd6": "ext-jedis-1.2.0.jar",
+        "31359b7d1c923121f76717ab2bc56a7f": "ext-mongo-1.1.0.jar",
+        "0b2c157b5fe3ffa15049814f3305433f": "jcl-over-slf4j-1.6.1.jar",
+        "d33ba279987d65c9ac379017f7fb6dfd": "jedis-1.5.0.jar",
+        "f09f5b5856b85b9d1b200a36355a0572": "jta-1.0.1B.jar",
+        "81afbdecb906d38236437ebc6f94bf3a": "jta.properties",
+        "b0707d398e9ad652c4d4f5d6ec51ebff": "jul-to-slf4j-1.6.1.jar",
+        "ce10f4dcf6268d918fc4b5df24a7a380": "log4j-over-slf4j-1.6.1.jar",
+        "e23ce3ebce741fcdfcf7f063a6d32c0a": "logback-classic-0.9.29.jar",
+        "ac79a282f1722e61b1886286d5055ce9": "logback-core-0.9.29.jar",
+        "1f1356d41f60f7a7c4130b32ed5189dc": "logback.xml",
+        "da4ce10d00e00ef9e77e52f6ad630290": "mongo-2.6.5.jar",
+        "dae1caa125dc979ba0275ea7cd093262": "mysql-connector-java-5.1.5.jar",
+        "bff6016da57e19fb736d0f5742ce60ac": "slf4j-api-1.6.1.jar",
+        "eeb8b45c9febec37e1b35f6cd9d3ae5e": "spymemcached-2.7.3.jar",
+        "358d83b091c360662cefbdcbc1e18cd4": "tomcat-juli-adapters.jar",
+        "985e85554d8010204f3140669b2a6a4c": "transactions-3.5.8.jar",
+        "c2aa283836adee903dcbc7f82428ff0d": "transactions-api-3.5.8.jar",
+        "0a44f8b6ce08ee00717cb7ba379b6d24": "transactions-hibernate3-3.5.8.jar",
+        "066ed23a7144659f44a9873908837c90": "transactions-jdbc-3.5.8.jar",
+        "661782b588a88d2806b03e2f9a9f3cba": "transactions-jta-3.5.8.jar",
+        "dcd95bcb84b09897b2b66d4684c040da": "xpp3_min-1.1.4c.jar",
+        "4dfebec402e7606b2c1f66dec1773e8f": "xstream-1.3.1.jar"
+      },
+      "prerelease": {
+        "7cc6a087459a324ede68f03448e9b069": "atomikos-tomcat-lifecycle.jar",
+        "adb14d77c8674f7c77b841f7eb68289c": "atomikos-util-3.5.8.jar",
+        "8e149c1053741c03736a52df83974dcc": "commons-codec-1.3.jar",
+        "dcdcbb47176603907c9f79a1349193eb": "commons-lang-2.3.jar",
+        "56ac2ad057458d654e0a83cffa0eb6be": "commons-pool-1.5.5.jar",
+        "9af7e3055b7650dafbdd7b81b74325e3": "context-forwarder-1.1.0.jar",
+        "27b2114598f0ae9d820539050eccbc7d": "core-session-1.7.0.jar",
+        "0441e86c3064b8bb7b6c38a1968b7e35": "core-util-2.1.0.jar",
+        "63c52a6b470db948774db57d712535e1": "ex-memcached-3.5.0.jar",
+        "a91a518df29c7c63a144ef10b5d6735f": "ext-atomikos-1.0.0.jar",
+        "b5f14c499e09e56406ea34f0dbfbdbd6": "ext-jedis-1.2.0.jar",
+        "31359b7d1c923121f76717ab2bc56a7f": "ext-mongo-1.1.0.jar",
+        "0b2c157b5fe3ffa15049814f3305433f": "jcl-over-slf4j-1.6.1.jar",
+        "d33ba279987d65c9ac379017f7fb6dfd": "jedis-1.5.0.jar",
+        "f09f5b5856b85b9d1b200a36355a0572": "jta-1.0.1B.jar",
+        "81afbdecb906d38236437ebc6f94bf3a": "jta.properties",
+        "b0707d398e9ad652c4d4f5d6ec51ebff": "jul-to-slf4j-1.6.1.jar",
+        "ce10f4dcf6268d918fc4b5df24a7a380": "log4j-over-slf4j-1.6.1.jar",
+        "e23ce3ebce741fcdfcf7f063a6d32c0a": "logback-classic-0.9.29.jar",
+        "ac79a282f1722e61b1886286d5055ce9": "logback-core-0.9.29.jar",
+        "1f1356d41f60f7a7c4130b32ed5189dc": "logback.xml",
+        "da4ce10d00e00ef9e77e52f6ad630290": "mongo-2.6.5.jar",
+        "dae1caa125dc979ba0275ea7cd093262": "mysql-connector-java-5.1.5.jar",
+        "bff6016da57e19fb736d0f5742ce60ac": "slf4j-api-1.6.1.jar",
+        "eeb8b45c9febec37e1b35f6cd9d3ae5e": "spymemcached-2.7.3.jar",
+        "358d83b091c360662cefbdcbc1e18cd4": "tomcat-juli-adapters.jar",
+        "985e85554d8010204f3140669b2a6a4c": "transactions-3.5.8.jar",
+        "c2aa283836adee903dcbc7f82428ff0d": "transactions-api-3.5.8.jar",
+        "0a44f8b6ce08ee00717cb7ba379b6d24": "transactions-hibernate3-3.5.8.jar",
+        "066ed23a7144659f44a9873908837c90": "transactions-jdbc-3.5.8.jar",
+        "661782b588a88d2806b03e2f9a9f3cba": "transactions-jta-3.5.8.jar",
+        "dcd95bcb84b09897b2b66d4684c040da": "xpp3_min-1.1.4c.jar",
+        "4dfebec402e7606b2c1f66dec1773e8f": "xstream-1.3.1.jar"
+      },
+      "prod": {
+        "7cc6a087459a324ede68f03448e9b069": "atomikos-tomcat-lifecycle.jar",
+        "adb14d77c8674f7c77b841f7eb68289c": "atomikos-util-3.5.8.jar",
+        "8e149c1053741c03736a52df83974dcc": "commons-codec-1.3.jar",
+        "dcdcbb47176603907c9f79a1349193eb": "commons-lang-2.3.jar",
+        "56ac2ad057458d654e0a83cffa0eb6be": "commons-pool-1.5.5.jar",
+        "9af7e3055b7650dafbdd7b81b74325e3": "context-forwarder-1.1.0.jar",
+        "27b2114598f0ae9d820539050eccbc7d": "core-session-1.7.0.jar",
+        "0441e86c3064b8bb7b6c38a1968b7e35": "core-util-2.1.0.jar",
+        "63c52a6b470db948774db57d712535e1": "ex-memcached-3.5.0.jar",
+        "a91a518df29c7c63a144ef10b5d6735f": "ext-atomikos-1.0.0.jar",
+        "b5f14c499e09e56406ea34f0dbfbdbd6": "ext-jedis-1.2.0.jar",
+        "31359b7d1c923121f76717ab2bc56a7f": "ext-mongo-1.1.0.jar",
+        "0b2c157b5fe3ffa15049814f3305433f": "jcl-over-slf4j-1.6.1.jar",
+        "d33ba279987d65c9ac379017f7fb6dfd": "jedis-1.5.0.jar",
+        "f09f5b5856b85b9d1b200a36355a0572": "jta-1.0.1B.jar",
+        "81afbdecb906d38236437ebc6f94bf3a": "jta.properties",
+        "b0707d398e9ad652c4d4f5d6ec51ebff": "jul-to-slf4j-1.6.1.jar",
+        "ce10f4dcf6268d918fc4b5df24a7a380": "log4j-over-slf4j-1.6.1.jar",
+        "e23ce3ebce741fcdfcf7f063a6d32c0a": "logback-classic-0.9.29.jar",
+        "ac79a282f1722e61b1886286d5055ce9": "logback-core-0.9.29.jar",
+        "1f1356d41f60f7a7c4130b32ed5189dc": "logback.xml",
+        "da4ce10d00e00ef9e77e52f6ad630290": "mongo-2.6.5.jar",
+        "dae1caa125dc979ba0275ea7cd093262": "mysql-connector-java-5.1.5.jar",
+        "bff6016da57e19fb736d0f5742ce60ac": "slf4j-api-1.6.1.jar",
+        "eeb8b45c9febec37e1b35f6cd9d3ae5e": "spymemcached-2.7.3.jar",
+        "358d83b091c360662cefbdcbc1e18cd4": "tomcat-juli-adapters.jar",
+        "985e85554d8010204f3140669b2a6a4c": "transactions-3.5.8.jar",
+        "c2aa283836adee903dcbc7f82428ff0d": "transactions-api-3.5.8.jar",
+        "0a44f8b6ce08ee00717cb7ba379b6d24": "transactions-hibernate3-3.5.8.jar",
+        "066ed23a7144659f44a9873908837c90": "transactions-jdbc-3.5.8.jar",
+        "661782b588a88d2806b03e2f9a9f3cba": "transactions-jta-3.5.8.jar",
+        "dcd95bcb84b09897b2b66d4684c040da": "xpp3_min-1.1.4c.jar",
+        "4dfebec402e7606b2c1f66dec1773e8f": "xstream-1.3.1.jar"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+To create a self-signed cert:
+$ keytool -genkey -alias tomcat -keyalg RSA -keystore thethrum.com_selfsigned.jks -validity 2000
+
+...
+  keystoreFile="${catalina.base}/cert/thethrum.com_selfsigned.jks" 
+  keystorePass="mypass"
+  keyAlias="tomcat"
+  keystoreType="JKS"
+...
+
+To convert from .crt + .key (downloaded from our F5s):
+$ openssl pkcs12 -export -in www.thethrum.com_ssl.crt -inkey www.thethrum.com_ssl.key -out www.thethrum.com_ssl.p12 -name tomcat
+
+...
+  keystoreFile="${catalina.base}/cert/thethrum.com_wildcard.p12" 
+  keystorePass="mypass"
+  keyAlias="tomcat"
+  keystoreType="PKCS12"
+...

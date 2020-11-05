@@ -1,0 +1,6 @@
+{
+  "id": "ops",
+  "grants": {
+    "ops": "GRANT ALL PRIVILEGES ON *.*"
+  }
+}

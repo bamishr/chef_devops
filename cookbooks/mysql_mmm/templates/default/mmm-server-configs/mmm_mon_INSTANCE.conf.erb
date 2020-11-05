@@ -1,0 +1,17 @@
+include mmm_common_<%= @instance %>.conf
+debug 0
+
+<monitor>
+   ip                    127.0.0.1
+   port                  <%= @instance_mon_port %>
+   pid_path              /var/run/mmm_mond-<%= @instance %>.pid
+   bin_path              /usr/lib/mysql-mmm/
+   status_path           /var/lib/misc/mmm_mond-<%= @instance %>.status
+   ping_ips              <%= @gateway_ip %>
+</monitor>
+
+<host default>
+   monitor_user          <%= @mon_user %>
+   monitor_password      <%= @mon_pass %>
+</host>
+

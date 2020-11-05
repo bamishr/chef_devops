@@ -1,0 +1,138 @@
+###
+### user
+###
+user <%= node['nginx']['user'] %><% if node['nginx']['user'] != node['nginx']['group'] %> <%= node['nginx']['group'] %><% end %>;
+
+###
+### worker processes
+###
+worker_processes  <%= node['nginx']['worker_processes'] %>;
+<% if node['nginx']['daemon_disable'] -%>
+daemon off;
+<% end -%>
+
+###
+### ulimit management
+###
+<% if node['nginx']['worker_rlimit_nofile'] -%>
+worker_rlimit_nofile <%= node['nginx']['worker_rlimit_nofile'] %>;
+<% end -%>
+
+###
+### error log
+###
+error_log  <%= node['nginx']['log_dir'] %>/error.log;
+
+###
+### pid
+###
+pid        <%= node['nginx']['pid'] %>;
+
+###
+### connection management
+###
+events {
+  worker_connections  <%= node['nginx']['worker_connections'] %>;
+<% if node['nginx']['multi_accept'] -%>
+  multi_accept on;
+<% end -%>
+<% if node['nginx']['event'] -%>
+  use <%= node['nginx']['event'] %>;
+<% end -%>
+}
+
+###
+### web server general format and options
+###
+http {
+  # naxsi
+  <% if node.recipe?('nginx::naxsi_module') %>
+  include       <%= node['nginx']['dir'] %>/naxsi_core.rules;
+  <% end %>
+
+  # mime types
+  include       <%= node['nginx']['dir'] %>/mime.types;
+  default_type  application/octet-stream;
+
+  # site specific access log
+  # disabled by the role override 
+  <% if node['nginx']['disable_access_log'] -%>
+  access_log off;
+  <% else -%>
+  access_log   <%= node['nginx']['log_dir'] %>/access.log;
+  <% end %>
+
+  # defaults really
+  sendfile <%= node['nginx']['sendfile'] %>;
+  tcp_nopush on;
+  tcp_nodelay on;
+
+  # log format
+  log_format  main  '$remote_addr - $remote_user [$time_local] $request '
+       '"$status" $body_bytes_sent "$http_referer" '
+       '"$http_user_agent" "$http_x_forwarded_for"';
+
+  # we cache files locally to protect backend IO from the asset servers
+  proxy_cache_path /local/cache/nginx levels=1:2 keys_zone=cache:10m inactive=7d max_size=<%= node[:nginx][:disk_cache_max_size] %>;
+
+  # we will want to keep an eye out here, for clogged connections, but these match thethrum prod
+  <% if node['nginx']['keepalive'] == "on" %>
+  keepalive_timeout  <%= node['nginx']['keepalive_timeout'] %>;
+  <% end %>
+
+  # lets compress everything we can with client side cpu and less bits on the wire
+  gzip  <%= node['nginx']['gzip'] %>;
+  <% if node['nginx']['gzip'] == "on" %>
+  gzip_http_version <%= node['nginx']['gzip_http_version'] %>;
+  gzip_comp_level <%= node['nginx']['gzip_comp_level'] %>;
+  gzip_proxied <%= node['nginx']['gzip_proxied'] %>;
+  gzip_vary <%= node['nginx']['gzip_vary'] %>;
+  <% if node['nginx']['gzip_buffers'] -%>
+  gzip_buffers <%= node['nginx']['gzip_buffers'] %>;
+  <% end -%>
+  gzip_types <%= node['nginx']['gzip_types'].join(' ') %>;
+  gzip_min_length  1000;
+  gzip_disable     "MSIE [1-6]\.";
+  <% end %>
+
+  # Directive assigns the size of basket in the hash-tables of the names of servers. This value by default depends on the size of the line 
+  # of processor cache. For more detail see the description of tuning the hash tables in Nginx Optimizations.
+  server_names_hash_bucket_size <%= node['nginx']['server_names_hash_bucket_size'] %>;
+  types_hash_max_size <%= node['nginx']['types_hash_max_size'] %>;
+  types_hash_bucket_size <%= node['nginx']['types_hash_bucket_size'] %>;
+  <% if node['nginx']['proxy_read_timeout'] -%>
+  proxy_read_timeout <%= node['nginx']['proxy_read_timeout'] %>;
+  <% end -%>
+  <% if node['nginx']['client_max_body_size'] -%>
+  client_max_body_size <%= node['nginx']['client_max_body_size'] %>;
+  <% end -%>
+
+  #=================
+  # thethrum foo
+  #=================
+  ###
+  ### for exe downloads, I am not sure we have any header issues
+  ### 
+  client_header_buffer_size    1k;
+  large_client_header_buffers  4 4k;
+
+  ###
+  ### wire management
+  ### 
+  output_buffers   1 32k;
+  postpone_output  1460;
+
+  ###
+  ### security foo
+  ###
+  ignore_invalid_headers   on;
+  recursive_error_pages    on;
+  server_name_in_redirect  off;
+  server_tokens            off;
+  #=================
+  # /thethrum foo
+  #=================
+
+  include <%= node['nginx']['dir'] %>/conf.d/*.conf;
+  include <%= node['nginx']['dir'] %>/sites-enabled/*;
+}

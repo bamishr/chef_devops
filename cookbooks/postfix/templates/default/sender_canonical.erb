@@ -1,0 +1,5 @@
+<% if node['company']['domain'] -%>
+/(.*?)@(.*)/   $1@<%= node['company']['domain'] %>
+<% elsif node['postfix']['domain'] -%>
+/(.*?)@(.*)/   $1@<%= node['postfix']['domain'] %>
+<% end -%>

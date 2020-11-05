@@ -1,0 +1,36 @@
+require 'rubygems'
+require 'dnsruby'
+include Dnsruby
+
+# Send the update to the zone's primary master.
+res = Dnsruby::Resolver.new("localhost")
+res.dnssec = false
+tsig = Dnsruby::RR.create({
+  :name        => "aws_ddns_tsig",
+  :type        => "TSIG",
+  :ttl         => 0,
+  :klass       => "ANY",
+  :algorithm   => "hmac-md5",
+  :fudge       => 300,
+  :key         => "PW9yd9VaVsropZ3GczuxPItJMo49S1kVe2051Cx9Hbk=",
+  :error       => 0
+})
+
+# Create the update packet.
+update = Dnsruby::Update.new('public.us-east.thethrum.com')
+
+# Prerequisite is that no records exist for the name.
+#update.present('ns01.public.us-east.thethrum.com.')
+#update.delete('ns01.public.us-east.thethrum.com.')
+
+# Prerequisite is that no records exist for the name.
+update.absent('ns01.public.us-east.thethrum.com.')
+
+# Add  the CNAME
+update.add('ns01.public.us-east.thethrum.com', 'CNAME', 30, 'ec2-107-22-116-136.compute-1.amazonaws.com.')
+
+# apply the TSIG signature and send the message :
+tsig.apply(update)
+response = res.send_message(update)
+print "TSIG response was verified? : #{response.verified?}\n"
+

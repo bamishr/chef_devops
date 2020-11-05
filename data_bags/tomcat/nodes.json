@@ -1,0 +1,10 @@
+{
+  "id": "nodes",
+  "pr-tomcat-site01.thethrum.com": {
+    "app_properties": {
+      "platform.host": "pr-int-platform.thethrum.com"
+    }
+  }
+}
+
+

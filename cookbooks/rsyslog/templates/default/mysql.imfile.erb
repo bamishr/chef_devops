@@ -1,0 +1,15 @@
+$DirCreateMode 0755
+$FileCreateMode 0644
+
+###
+<% @mysql_matches['programs'].each do |p| -%>
+<% @mysql_matches['type'].each do |t| -%>
+### <%= p %>-<%= t %>
+$InputFileName /var/log/mysql/mysql-<%= p %>-<%= t %>.log
+$InputFileStateFile mysql-<%= p %>-<%= t %>
+$InputFileTag mysql-<%= p %>-<%= t %>:
+$InputRunFileMonitor
+<% end -%>
+<% end -%>
+###
+

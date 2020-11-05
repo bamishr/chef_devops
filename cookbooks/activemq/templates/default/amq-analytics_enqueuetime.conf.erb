@@ -1,0 +1,59 @@
+graph_title AMQ Analytics Enqueue Time 
+graph_vlabel Enqueue Time
+graph_category ActiveMQ
+graph_order amq_CommerceUser amq_OpalsAwards amq_ProfileEmail amq_RenderApp amq_SocialAnalytic amq_SocialAnalyticQueue amq_WorldsRecall amq_WorldsRestocking amq_WorldsUserConvert
+
+amq_CommerceUser.label CommerceUser
+amq_CommerceUser.jmxObjectName thethrum.com:BrokerName=<%= @node[:fqdn] %>,Type=Queue,Destination=commerce.user.convert
+amq_CommerceUser.jmxAttributeName AverageEnqueueTime
+amq_CommerceUser.type COUNTER
+amq_CommerceUser.min 0
+
+amq_OpalsAwards.label OpalsAwards
+amq_OpalsAwards.jmxObjectName thethrum.com:BrokerName=<%= @node[:fqdn] %>,Type=Queue,Destination=opals.awards
+amq_OpalsAwards.jmxAttributeName AverageEnqueueTime
+amq_OpalsAwards.type COUNTER
+amq_OpalsAwards.min 0
+
+amq_ProfileEmail.label ProfileEmail
+amq_ProfileEmail.jmxObjectName thethrum.com:BrokerName=<%= @node[:fqdn] %>,Type=Queue,Destination=profile.emailOptIn
+amq_ProfileEmail.jmxAttributeName AverageEnqueueTime
+amq_ProfileEmail.type COUNTER
+amq_ProfileEmail.min 0
+
+amq_RenderApp.label RenderApp
+amq_RenderApp.jmxObjectName thethrum.com:BrokerName=<%= @node[:fqdn] %>,Type=Queue,Destination=render-app.queue
+amq_RenderApp.jmxAttributeName AverageEnqueueTime
+amq_RenderApp.type COUNTER
+amq_RenderApp.min 0
+
+amq_SocialAnalytic.label SocialAnalytic
+amq_SocialAnalytic.jmxObjectName thethrum.com:BrokerName=<%= @node[:fqdn] %>,Type=Queue,Destination=social.analytic
+amq_SocialAnalytic.jmxAttributeName AverageEnqueueTime
+amq_SocialAnalytic.type COUNTER
+amq_SocialAnalytic.min 0
+
+amq_SocialAnalyticQueue.label SocialAnalyticQueue
+amq_SocialAnalyticQueue.jmxObjectName thethrum.com:BrokerName=<%= @node[:fqdn] %>,Type=Queue,Destination=social.analytic.queue
+amq_SocialAnalyticQueue.jmxAttributeName AverageEnqueueTime
+amq_SocialAnalyticQueue.type COUNTER
+amq_SocialAnalyticQueue.min 0
+
+amq_WorldsRecall.label WorldsRecall
+amq_WorldsRecall.jmxObjectName thethrum.com:BrokerName=<%= @node[:fqdn] %>,Type=Queue,Destination=worlds.recall
+amq_WorldsRecall.jmxAttributeName AverageEnqueueTime
+amq_WorldsRecall.type COUNTER
+amq_WorldsRecall.min 0
+
+amq_WorldsRestocking.label WorldsRestocking
+amq_WorldsRestocking.jmxObjectName thethrum.com:BrokerName=<%= @node[:fqdn] %>,Type=Queue,Destination=worlds.restocking
+amq_WorldsRestocking.jmxAttributeName AverageEnqueueTime
+amq_WorldsRestocking.type COUNTER
+amq_WorldsRestocking.min 0
+
+amq_WorldsUserConvert.label WorldsUserConvert
+amq_WorldsUserConvert.jmxObjectName thethrum.com:BrokerName=<%= @node[:fqdn] %>,Type=Queue,Destination=worlds.user.convert
+amq_WorldsUserConvert.jmxAttributeName AverageEnqueueTime
+amq_WorldsUserConvert.type COUNTER
+amq_WorldsUserConvert.min 0
+

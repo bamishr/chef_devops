@@ -1,0 +1,139 @@
+{
+  "mysql-thethrum": {
+    "grants": {
+      "mysql-thethrum": {
+        "repl": [
+          "GRANT REPLICATION CLIENT, REPLICATION SLAVE ON *.*"
+        ]
+      },
+      "tomcat-thethrum-web": {
+        "site": [
+          "GRANT SELECT ON *.*"
+        ]
+      },
+      "tomcat-tools": {
+        "tools": [
+          "GRANT DELETE, INSERT, SELECT, UPDATE ON `tools`.*",
+          "GRANT DELETE, INSERT, SELECT, UPDATE ON `site`.*",
+          "GRANT DELETE, INSERT, SELECT, UPDATE ON `reports`.*"
+        ]
+      }
+    },
+    "users": {
+      "dev_users": {
+        "10.%": [ "GRANT FILE, LOCK TABLES, SELECT ON *.*" ]
+      },
+      "pm_users": {
+        "10.%": [ "GRANT FILE, LOCK TABLES, SELECT ON *.*" ]
+      },
+      "qa_users": {
+        "10.%": [ 
+          "GRANT FILE, LOCK TABLES, SELECT ON *.*",
+          "GRANT ALTER, CREATE, DELETE, DROP, INDEX, INSERT, LOCK TABLES, SELECT, UPDATE ON `thethrum`.*" 
+        ]
+      }
+    }
+  },
+  "dev": {
+    "my_cnf": {
+      "innodb_write_io_threads": "4",
+      "innodb_io_capacity": "200",
+      "innodb_read_io_threads": "4"
+    }
+  },
+  "prod": {
+    "my_cnf": {
+      "innodb_write_io_threads": "6",
+      "innodb_io_capacity": "200",
+      "innodb_read_io_threads": "6"
+    }
+  },
+  "mysql-adhoc": {
+    "users": {
+      "dev_users": {
+        "10.%": [ "GRANT FILE, LOCK TABLES, SELECT ON *.*" ]
+      },
+      "pm_users": {
+        "10.%": [ "GRANT FILE, LOCK TABLES, SELECT ON *.*" ]
+      },
+      "qa_users": {
+        "10.%": [ "GRANT FILE, LOCK TABLES, SELECT ON *.*" ]
+      }
+    },
+    "grants": {
+      "jenkins": {
+        "jenkins": [
+          "GRANT SELECT, INSERT, UPDATE, DELETE, DROP, CREATE, CREATE TEMPORARY TABLES, INDEX ON *.*"
+        ]
+      }
+    },
+    "plural_grants": {
+      "staging": {
+        "scheduler": {
+          "jenkins": [
+            "GRANT SELECT ON *.*"
+          ],
+          "standalone": [
+            "GRANT SELECT ON *.*"
+          ],
+          "s-jenkins": [
+            "GRANT SELECT ON *.*"
+          ],
+          "s-standalone": [
+            "GRANT SELECT ON *.*"
+          ]
+        }
+      },
+      "dev": {
+        "jenkins": {
+          "jenkins": [
+            "GRANT SELECT ON *.*"
+          ],
+          "standalone": [
+            "GRANT SELECT ON *.*"
+          ],
+          "d-jenkins": [
+            "GRANT SELECT ON *.*"
+          ],
+          "d-standalone": [
+            "GRANT SELECT ON *.*"
+          ]
+        }
+      }
+    }
+  },
+  "id": "roles",
+  "mysql-base": {
+    "grants": {
+      "munin": {
+        "munin": [
+          "GRANT REPLICATION CLIENT, SELECT ON *.*"
+        ]
+      },
+      "mmm-mon": {
+        "mmm-mon": [
+          "GRANT REPLICATION CLIENT ON *.*"
+        ]
+      },
+      "jenkins": {
+        "jenkins": [
+          "GRANT CREATE, DELETE, FILE, INDEX, INSERT, SELECT, UPDATE ON *.*"
+        ],
+        "standalone": [
+          "GRANT DELETE, INSERT, SELECT, UPDATE ON *.*"
+        ]
+      },
+      "prod-monitoring": {
+        "nagios": [
+          "GRANT SELECT ON *.*"
+        ],
+        "repl_test": [
+          "GRANT REPLICATION CLIENT ON *.*"
+        ],
+        "cacti": [
+          "GRANT SUPER, PROCESS ON *.*"
+        ]
+      }
+    }
+  }
+}

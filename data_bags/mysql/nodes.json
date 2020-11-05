@@ -1,0 +1,167 @@
+{
+  "id": "nodes",
+  "mysql-backup01.us-east-1b.thethrum.com": {
+    "my_cnf": {
+      "server_id": "1111111110",
+      "binlog_format": "ROW",
+      "max_heap_table_size": "1G",
+      "tmp_table_size": "1G",
+      "innodb_flush_method": "O_DIRECT",
+      "innodb_flush_log_at_trx_commit": "0",
+      "innodb_doublewrite": "1",
+      "innodb_buffer_pool_size": "1G",
+      "old_passwords": "OFF",
+      "query_cache_type": "0",
+      "report_host": "mysql-backup01.us-east-1b.thethrum.com",
+      "wsrep_provider": "/usr/lib/libgalera_smm.so",
+      "wsrep_slave_threads": "2"
+    }
+  },
+  "mysql-cluster01.us-east-1b.thethrum.com": {
+    "my_cnf": {
+      "server_id": "1111111111",
+      "binlog_format": "ROW",
+      "max_heap_table_size": "1G",
+      "tmp_table_size": "1G",
+      "innodb_flush_method": "O_DIRECT",
+      "innodb_flush_log_at_trx_commit": "0",
+      "innodb_doublewrite": "1",
+      "innodb_buffer_pool_size": "1G",
+      "old_passwords": "OFF",
+      "query_cache_type": "0",
+      "report_host": "mysql-cluster01.us-east-1b.thethrum.com",
+      "wsrep_provider": "/usr/lib/libgalera_smm.so",
+      "wsrep_slave_threads": "2"
+    }
+  },
+  "mysql-cluster02.us-east-1c.thethrum.com": {
+    "my_cnf": {
+      "server_id": "2222222222",
+      "binlog_format": "ROW",
+      "max_heap_table_size": "1G",
+      "tmp_table_size": "1G",
+      "innodb_flush_method": "O_DIRECT",
+      "innodb_flush_log_at_trx_commit": "0",
+      "innodb_doublewrite": "1",
+      "innodb_buffer_pool_size": "1G",
+      "old_passwords": "OFF",
+      "query_cache_type": "0",
+      "report_host": "mysql-cluster02.ius-east-1c.thethrum.com",
+      "wsrep_provider": "/usr/lib/libgalera_smm.so",
+      "wsrep_slave_threads": "2"
+    }
+  },
+  "mysql-cluster03.us-east-1d.thethrum.com": {
+    "my_cnf": {
+      "server_id": "3333333333",
+      "binlog_format": "ROW",
+      "max_heap_table_size": "1G",
+      "tmp_table_size": "1G",
+      "innodb_flush_method": "O_DIRECT",
+      "innodb_flush_log_at_trx_commit": "0",
+      "innodb_doublewrite": "1",
+      "innodb_buffer_pool_size": "1G",
+      "old_passwords": "OFF",
+      "query_cache_type": "0",
+      "wsrep_provider": "/usr/lib/libgalera_smm.so",
+      "wsrep_slave_threads": "2"
+    }
+  },
+  "mysql-cluster04.us-west-2a.thethrum.com": {
+    "my_cnf": {
+      "server_id": "4444444444",
+      "binlog_format": "ROW",
+      "max_heap_table_size": "1G",
+      "tmp_table_size": "1G",
+      "innodb_flush_method": "O_DIRECT",
+      "innodb_flush_log_at_trx_commit": "0",
+      "innodb_doublewrite": "1",
+      "innodb_buffer_pool_size": "1G",
+      "old_passwords": "OFF",
+      "query_cache_type": "0",
+      "wsrep_provider": "/usr/lib/libgalera_smm.so",
+      "wsrep_slave_threads": "2"
+    }
+  },
+  "mysql-cluster05.us-west-2b.thethrum.com": {
+    "my_cnf": {
+      "server_id": "5555555555",
+      "binlog_format": "ROW",
+      "max_heap_table_size": "1G",
+      "tmp_table_size": "1G",
+      "innodb_flush_method": "O_DIRECT",
+      "innodb_flush_log_at_trx_commit": "0",
+      "innodb_doublewrite": "1",
+      "innodb_buffer_pool_size": "1G",
+      "old_passwords": "OFF",
+      "query_cache_type": "0",
+      "wsrep_provider": "/usr/lib/libgalera_smm.so",
+      "wsrep_slave_threads": "2"
+    }
+  },
+  "mysql-cluster06.us-west-2c.thethrum.com": {
+    "my_cnf": {
+      "server_id": "5555555556",
+      "binlog_format": "ROW",
+      "max_heap_table_size": "1G",
+      "tmp_table_size": "1G",
+      "innodb_flush_method": "O_DIRECT",
+      "innodb_flush_log_at_trx_commit": "0",
+      "innodb_doublewrite": "1",
+      "innodb_buffer_pool_size": "1G",
+      "old_passwords": "OFF",
+      "query_cache_type": "0",
+      "wsrep_provider": "/usr/lib/libgalera_smm.so",
+      "wsrep_slave_threads": "2"
+    }
+  },
+  "d-mysql-cluster01.us-east-1b.thethrum.com": {
+    "my_cnf": {
+      "server_id": "6666666666",
+      "binlog_format": "ROW",
+      "max_heap_table_size": "1G",
+      "tmp_table_size": "1G",
+      "innodb_flush_method": "O_DIRECT",
+      "innodb_flush_log_at_trx_commit": "0",
+      "innodb_doublewrite": "1",
+      "innodb_buffer_pool_size": "1G",
+      "old_passwords": "OFF",
+      "query_cache_type": "0",
+      "wsrep_provider": "/usr/lib/libgalera_smm.so",
+      "wsrep_slave_threads": "2"
+    }
+  },
+  "d-mysql-cluster02.us-west-2a.thethrum.com": {
+    "my_cnf": {
+      "server_id": "7777777777",
+      "binlog_format": "ROW",
+      "max_heap_table_size": "1G",
+      "tmp_table_size": "1G",
+      "innodb_flush_method": "O_DIRECT",
+      "innodb_flush_log_at_trx_commit": "0",
+      "innodb_doublewrite": "1",
+      "innodb_buffer_pool_size": "1G",
+      "old_passwords": "OFF",
+      "query_cache_type": "0",
+      "wsrep_provider": "/usr/lib/libgalera_smm.so",
+      "wsrep_slave_threads": "2"
+    }
+  },
+  "d-mysql-cluster03.us-west-2b.thethrum.com": {
+    "my_cnf": {
+      "server_id": "8888888888",
+      "binlog_format": "ROW",
+      "max_heap_table_size": "1G",
+      "tmp_table_size": "1G",
+      "innodb_flush_method": "O_DIRECT",
+      "innodb_flush_log_at_trx_commit": "0",
+      "innodb_doublewrite": "1",
+      "innodb_buffer_pool_size": "1G",
+      "old_passwords": "OFF",
+      "query_cache_type": "0",
+      "wsrep_provider": "/usr/lib/libgalera_smm.so",
+      "wsrep_slave_threads": "2"
+    }
+  }
+}
+

@@ -1,0 +1,17 @@
+graph_title AMQ File Descriptor Usage
+graph_vlabel File Descriptors
+graph_category ActiveMQ
+graph_order amq_MaxFileDescriptors amq_OpenFileDescriptorCount
+
+amq_MaxFileDescriptors.label MaxFileDescriptors
+amq_MaxFileDescriptors.jmxObjectName java.lang:type=OperatingSystem
+amq_MaxFileDescriptors.jmxAttributeName MaxFileDescriptorCount
+amq_MaxFileDescriptors.type COUNTER
+amq_MaxFileDescriptors.min 0
+
+amq_OpenFileDescriptorCount.label OpenFileDescriptorCount
+amq_OpenFileDescriptorCount.jmxObjectName java.lang:type=OperatingSystem
+amq_OpenFileDescriptorCount.jmxAttributeName OpenFileDescriptorCount
+amq_OpenFileDescriptorCount.type COUNTER
+amq_OpenFileDescriptorCount.min 0
+

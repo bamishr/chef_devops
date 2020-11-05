@@ -1,0 +1,9 @@
+percona-server-server-5.5        percona-server-server/root_password_again                select <%= @mysql_root_passwd %>
+percona-server-server-5.5        percona-server-server/root_password                      select <%= @mysql_root_passwd %>
+percona-server-server-5.5        percona-server-server-5.5/really_downgrade               boolean false
+percona-server-server-5.5        percona-server-server-5.5/need_sarge_compat              boolean false
+percona-server-server-5.5        percona-server-server-5.5/start_on_boot                  boolean true
+percona-server-server-5.5        percona-server-server/error_setting_password             boolean false
+percona-server-server-5.5        percona-server-server-5.5/nis_warning                    note
+percona-server-server-5.5        percona-server-server-5.5/postrm_remove_databases        boolean false
+percona-server-server-5.5        percona-server-server/password_mismatch                  boolean false

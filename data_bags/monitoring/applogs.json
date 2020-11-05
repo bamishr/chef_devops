@@ -1,0 +1,98 @@
+{
+  "mysql": {
+    "matches": {
+      "programs": [
+        "dev",
+        "qa",
+        "site",
+        "social",
+        "staging",
+        "user"
+      ],
+      "type": [
+        "error",
+        "general",
+        "slow"
+      ]
+    }
+  },
+  "varnish": {
+    "matches": {
+      "messages": [
+        "img.thethrum.com",
+        "ws.thethrum.com",
+        "update.thethrum.com",
+        "www.thethrum.com"
+      ],
+      "hosts": [
+        "cdn",
+        "download",
+        "img",
+        "varnish"
+      ]
+    }
+  },
+  "nginx": {
+    "matches": {
+      "levels": {
+        "access": 6,
+        "debug": 7,
+        "error": 5
+      }
+    }
+  },
+  "id": "applogs",
+  "network": {
+    "matches": {
+      "messages": [
+        "fw01",
+        "fw02",
+        "lb01",
+        "lb02",
+        "switch01"
+      ],
+      "programs": [
+        "f5-ltm-log"
+      ]
+    }
+  },
+  "apache": {
+    "matches": {
+      "messages": [
+        "assets.thethrum.com",
+        "download.thethrum.com",
+        "img.thethrum.com",
+        "maintenance.thethrum.com",
+        "origin.thethrum.com"
+      ]
+    }
+  },
+  "redis": {
+    "matches": {
+      "messages": [
+        "redis"
+      ]
+    }
+  },
+  "tomcat": {
+    "matches": {
+      "otherlogs": [
+        "access",
+        "jasperserver",
+        "tomcat"
+      ],
+      "programs": [
+        "auth",
+        "awards",
+        "catalog",
+        "collections",
+        "commerce",
+        "corp",
+        "csadmin",
+        "search",
+        "services",
+        "user"
+      ]
+    }
+  }
+}

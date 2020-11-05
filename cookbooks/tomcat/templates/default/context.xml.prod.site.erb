@@ -1,0 +1,66 @@
+<!-- The contents of this file will be loaded for each web application -->
+<Context crossContext="true" privileged="true">
+
+    <!-- Default set of monitored resources -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+    <Transaction factory="com.atomikos.icatch.jta.UserTransactionFactory" />
+
+   <Environment name="const/deploy-env" value="prod"
+         type="java.lang.String" override="false"/>
+
+   <Environment name="const/service-auth-token" value="0bf3bd7eb0037a6f6b7255d1dae191e703b9f972625537735sfefdgdfeaa6fde8f9390926ed0a99876cd62f3c8265f1d578c4c83c28d58d5c65b27481d19d61377"
+         type="java.lang.String" override="false"/>
+
+    <Environment name="const/facebook-instance-host" value="fb.instance.thethrum.com"
+         type="java.lang.String" override="false"/>
+
+   <Environment name="const/memcached-servers" value="memcached-instance01.thethrum.com:11211 memcached-instance02.thethrum.com:11211 memcached-instance03.thethrum.com:11211 "
+        type="java.lang.String" override="false"/>
+
+    <Environment name="const/redis-hostname" value="redis-config.thethrum.com"
+         type="java.lang.String" override="false"/>
+    <Environment name="const/redis-port" value="6379"
+         type="java.lang.Integer" override="false"/>
+    <Environment name="const/redis-password" value=""
+         type="java.lang.String" override="false"/>
+
+    <Resource name="jms/factory" auth="Container" type="org.apache.activemq.ActiveMQConnectionFactory" 
+               description="JMS Connection Factory" factory="org.apache.activemq.jndi.JNDIReferenceFactory" 
+               brokerURL="failover://(tcp://jms01.thethrum.com:61616,tcp://jms02.thethrum.com:61616)" brokerName="LocalActiveMQBroker"/>
+
+    <Resource name="jms/pooled-factory" auth="Container" type="org.apache.activemq.pool.AmqJNDIPooledConnectionFactory" 
+               description="JMS Connection Factory" factory="org.apache.activemq.jndi.JNDIReferenceFactory" 
+               brokerURL="failover://(tcp://jms01.thethrum.com:61616,tcp://jms02.thethrum.com:61616)" brokerName="LocalActiveMQBroker"/>
+
+    <ResourceLink
+        name="redis/config"
+        global="redis/config"
+        type="com.thethrum.ext.jedis.Pool" />
+
+    <ResourceLink 
+        name="jdbc/user"
+        global="jdbc/user"
+        type="javax.sql.DataSource" />
+
+    <ResourceLink 
+        name="jdbc/instance"
+        global="jdbc/instance"
+        type="javax.sql.DataSource" />
+          
+    <ResourceLink 
+        name="jdbc/instance-ro"
+        global="jdbc/instance-ro"
+        type="javax.sql.DataSource" />
+
+    <ResourceLink 
+        name="jdbc/sessions"
+        global="jdbc/sessions"
+        type="javax.sql.DataSource" />
+
+    <ResourceLink 
+        name="web/ForwardingRegistry"
+        global="web/ForwardingRegistry"
+        type="com.thethrum.core.forward.Registry" />
+
+</Context>

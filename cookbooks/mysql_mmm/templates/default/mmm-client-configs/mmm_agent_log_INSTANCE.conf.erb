@@ -1,0 +1,21 @@
+log4perl.logger = INFO, LogFile, ScreenLog, MailFatal
+
+log4perl.appender.LogFile = Log::Log4perl::Appender::File
+log4perl.appender.LogFile.Threshold = INFO 
+log4perl.appender.LogFile.filename = /var/log/mysql-mmm/mmm-<%= @instance %>.log
+log4perl.appender.LogFile.recreate = 1
+log4perl.appender.LogFile.layout = PatternLayout
+log4perl.appender.LogFile.layout.ConversionPattern = %d %5p %m%n
+
+log4perl.appender.ScreenLog = Log::Log4perl::Appender::Screen
+log4perl.appender.ScreenLog.stderr = 0
+log4perl.appender.ScreenLog.layout = PatternLayout
+log4perl.appender.ScreenLog.layout.ConversionPattern = %d %5p %m%n
+
+log4perl.appender.MailFatal = Log::Dispatch::Email::MailSend
+log4perl.appender.MailFatal.Threshold = FATAL 
+log4perl.appender.MailFatal.to = <%= @alert_email %>
+log4perl.appender.MailFatal.buffered = 0
+log4perl.appender.MailFatal.subject = FATAL error in progam
+log4perl.appender.MailFatal.layout = PatternLayout
+log4perl.appender.MailFatal.layout.ConversionPattern = %d %m%n

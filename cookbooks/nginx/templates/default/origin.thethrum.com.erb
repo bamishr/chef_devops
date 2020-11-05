@@ -1,0 +1,108 @@
+
+server {
+
+   ###
+   ### listening port
+   ###
+   listen 8080;
+
+   ###
+   ### we are not using a virtual host format, so this is a catchall based on hostname
+   ###
+   server_name localhost;
+
+   ###
+   ### access logging... FOR DEBUGGING ONLY
+   ###
+   #access_log <%= node[:nginx][:log_dir] %>/localhost-8080.access.log;
+   error_log <%= node[:nginx][:log_dir] %>/error.log;
+
+   ###
+   ### security - see https://calomel.org/nginx.html
+   ###
+   # Only allow GET and HEAD request methods
+   if ($request_method !~ ^(GET|HEAD)$ ) {
+      return 444;
+   }
+
+   ###
+   ### monitoring
+   ###
+   location /nginx_status {
+      stub_status on;
+      access_log off;
+      allow 127.0.0.1;
+      deny all;
+   }
+
+   location / {
+
+      root <%= node[:nginx][:cache_dir] %>;
+      index index.html index.htm;
+
+      # General Proxy Options
+      # proxy_set_header	X-Forwarded-For $remote_addr; 
+      proxy_set_header 	X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header  X-Real-IP  $remote_addr;
+      proxy_set_header	Host       $host;
+      proxy_ignore_client_abort off;
+      proxy_headers_hash_bucket_size 6400;
+      proxy_headers_hash_max_size 51200;
+
+      # intercept responses with HTTP status codes of 400 and higher. nginx will intercept status codes that are explicitly handled by
+      # an error_page directive. Responses with status codes that do not match an error_page directive will be sent as-is from the proxied server.
+      proxy_intercept_errors    on;
+      proxy_next_upstream       error timeout invalid_header;
+      proxy_redirect            off;
+      proxy_set_header          X-Forwarded-For $remote_addr;
+      proxy_connect_timeout     60;
+      proxy_send_timeout        60;
+      proxy_read_timeout        300;
+
+      # Directive determines, in what cases the request will be transmitted to the next server:
+      proxy_cache_use_stale error timeout invalid_header;
+
+      # caching to local disk   	
+      proxy_cache	cache;
+      
+      # The directive specifies what information is included in the key for caching, for example
+      proxy_cache_key $uri;
+		
+      # This directive set the time for caching different replies. For valid requests, 1 hour, for 404, 5 minutes.
+      #proxy_cache_valid any 10m;
+      proxy_cache_valid 200 7d;
+      proxy_cache_valid 404 5m;
+      
+      # Directive determines, in what cases the request will be transmitted to the next server:
+      proxy_cache_use_stale updating http_500 http_502 http_503 http_504;
+
+      #==================================
+      # direct traffic
+      #==================================
+      proxy_pass 	http://assets.thethrum.com:80;
+
+
+      ###
+      ### user-agent locking
+      ###
+      if ($http_user_agent !~ ^(EdgeAccel|HWCDN)) {
+         return   403;
+      }
+   }
+
+   # don't cache admin folder, send all requests through the proxy
+   #location /admin {
+   #   proxy_pass http://localhost:8080;
+   #}
+
+   ###
+   ### allow purging from a url
+   ###
+   location ~ /purge(/.*$) {
+      allow 127.0.0.1;
+      deny all;
+      proxy_cache_purge cache $1;
+   }
+
+}
+

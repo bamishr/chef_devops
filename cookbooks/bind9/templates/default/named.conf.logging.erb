@@ -1,0 +1,17 @@
+logging {
+
+  channel default_syslog {
+
+    syslog daemon;
+    severity warning;
+    print-time yes;
+    print-severity yes;
+    print-category yes;
+
+  };
+
+  category default { default_syslog; };
+  category general { default_syslog; };
+
+};
+

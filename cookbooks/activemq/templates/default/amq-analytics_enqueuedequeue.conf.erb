@@ -1,0 +1,17 @@
+graph_title AMQ Analytics Enqueue Dequeue Count
+graph_vlabel Messages
+graph_category ActiveMQ
+graph_order amq_TotalEnqueueCount amq_TotalDequeueCount
+
+amq_TotalEnqueueCount.label TotalEnqueueCount
+amq_TotalEnqueueCount.jmxObjectName thethrum.com:BrokerName=<%= @node[:fqdn] %>,Type=Broker
+amq_TotalEnqueueCount.jmxAttributeName TotalEnqueueCount
+amq_TotalEnqueueCount.type COUNTER
+amq_TotalEnqueueCount.min 0
+
+amq_TotalDequeueCount.label TotalDequeueCount
+amq_TotalDequeueCount.jmxObjectName thethrum.com:BrokerName=<%= @node[:fqdn] %>,Type=Broker
+amq_TotalDequeueCount.jmxAttributeName TotalDequeueCount
+amq_TotalDequeueCount.type COUNTER
+amq_TotalDequeueCount.min 0
+

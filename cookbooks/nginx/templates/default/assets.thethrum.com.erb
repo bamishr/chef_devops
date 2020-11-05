@@ -1,0 +1,52 @@
+
+server {
+
+   ###
+   ### listening port
+   ###
+   listen 80;
+
+   ###
+   ### we are not using a virtual host format, so this is a catchall based on hostname
+   ###
+   server_name assets.thethrum.com;
+
+   ###
+   ### access logging... FOR DEBUGGING ONLY
+   ###
+   #access_log <%= node[:nginx][:log_dir] %>/access.log;
+   error_log <%= node[:nginx][:log_dir] %>/error.log;
+
+   ###
+   ### security - see https://calomel.org/nginx.html
+   ###
+   # Only allow GET and HEAD request methods
+   if ($request_method !~ ^(GET|HEAD)$ ) {
+      return 444;
+   }
+
+   ###
+   ### monitoring
+   ###
+   location /server-status {
+      stub_status on;
+      access_log off;
+      allow 127.0.0.1;
+      deny all;
+   }
+
+   location / {
+
+      root /array;
+      index index.html index.htm;
+
+      ###
+      ### user-agent locking
+      ###
+      if ($http_user_agent !~ ^(EdgeAccel|HWCDN)) {
+         return   403;
+      }
+   }
+
+}
+

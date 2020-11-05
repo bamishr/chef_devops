@@ -1,0 +1,67 @@
+require 'rubygems'
+require 'dnsruby'
+include Dnsruby
+
+# Send the update to the zone's primary master.
+res = Dnsruby::Resolver.new("<%= node[:bind9][:resolver] %>")
+res.dnssec = false
+tsig = Dnsruby::RR.create({
+  :name        => "aws_ddns_tsig",
+  :type        => "TSIG",
+  :ttl         => 0,
+  :klass       => "ANY",
+  :algorithm   => "hmac-md5",
+  :fudge       => 300,
+  :key         => "<%= @aws_ddns_tsig %>",
+  :error       => 0
+})
+
+###
+### the public CNAME
+###
+
+# Create the update packet.
+update = Dnsruby::Update.new('<%= @public_ddns_zone %>')
+
+# Prerequisite is that no records exist for the name.
+update.absent('<%= n['thethrum']['hostname'] %>.<%= @public_ddns_zone %>.')
+
+# Add  the CNAME
+update.add('<%= n['thethrum']['hostname'] %>.<%= @public_ddns_zone %>', 'CNAME', 30, '<%= n['ec2']['public_hostname'] %>')
+
+# apply the TSIG signature and send the message :
+tsig.apply(update)
+
+# send the message
+begin
+  response = res.send_message(update)
+  print "Update succeeded: #{response.verified?}\n"
+  rescue Exception => e
+  print "Update failed: #{e}\n"
+end
+
+###
+### the local CNAME
+###
+
+# Create the update packet.
+update = Dnsruby::Update.new('<%= @local_ddns_zone %>')
+
+# Prerequisite is that no records exist for the name.
+update.absent('<%= n['thethrum']['hostname'] %>.<%= @local_ddns_zone %>.')
+
+# Add  the CNAME
+update.add('<%= n['thethrum']['hostname'] %>.<%= @local_ddns_zone %>', 'CNAME', 30, '<%= n['ec2']['local_hostname'] %>')
+
+# apply the TSIG signature and send the message :
+tsig.apply(update)
+
+# send the message
+begin
+  response = res.send_message(update)
+  print "Update succeeded: #{response.verified?}\n"
+  rescue Exception => e
+  print "Update failed: #{e}\n"
+end
+
+
